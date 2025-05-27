@@ -86,12 +86,15 @@ namespace Redadeg.lmuDataPlugin
                 ButtonBindSettings.RealTimeClock = JSONSettingsdata["RealTimeClock"] != null ? (bool)JSONSettingsdata["RealTimeClock"] : false;
                 ButtonBindSettings.GetMemoryDataThreadTimeout = JSONSettingsdata["GetMemoryDataThreadTimeout"] != null ? (int)JSONSettingsdata["GetMemoryDataThreadTimeout"] : 50;
                 ButtonBindSettings.DataUpdateThreadTimeout = JSONSettingsdata["DataUpdateThreadTimeout"] != null ? (int)JSONSettingsdata["DataUpdateThreadTimeout"] : 100;
+                ButtonBindSettings.AntiFlickPitMenuTimeout = JSONSettingsdata["AntiFlickPitMenuTimeout"] != null ? (int)JSONSettingsdata["AntiFlickPitMenuTimeout"] : 10;
+
             }
             catch { }
             clock_format24.IsChecked = ButtonBindSettings.Clock_Format24;
             RealTimeClock.IsChecked = ButtonBindSettings.RealTimeClock;
             GetMemoryDataThreadTimeout.Value = ButtonBindSettings.GetMemoryDataThreadTimeout;
             DataUpdateThreadTimeout.Value = ButtonBindSettings.DataUpdateThreadTimeout;
+            AntiFlickPitMenuTimeout.Value = ButtonBindSettings.AntiFlickPitMenuTimeout;
         }
 
    
@@ -106,7 +109,8 @@ namespace Redadeg.lmuDataPlugin
                 ButtonBindSettings.Clock_Format24 = JSONSettingsdata["Clock_Format24"] != null ? (bool)JSONSettingsdata["Clock_Format24"] : false;
                 ButtonBindSettings.RealTimeClock = JSONSettingsdata["RealTimeClock"] != null ? (bool)JSONSettingsdata["RealTimeClock"] : false;
                 ButtonBindSettings.GetMemoryDataThreadTimeout = JSONSettingsdata["GetMemoryDataThreadTimeout"] != null ? (int)JSONSettingsdata["GetMemoryDataThreadTimeout"] : 50;
-                ButtonBindSettings.DataUpdateThreadTimeout = JSONSettingsdata["DataUpdateThreadTimeout"] != null ? (int)JSONSettingsdata["DataUpdateThreadTimeout"] : 20;
+                ButtonBindSettings.DataUpdateThreadTimeout = JSONSettingsdata["DataUpdateThreadTimeout"] != null ? (int)JSONSettingsdata["DataUpdateThreadTimeout"] : 100;
+                ButtonBindSettings.AntiFlickPitMenuTimeout = JSONSettingsdata["AntiFlickPitMenuTimeout"] != null ? (int)JSONSettingsdata["AntiFlickPitMenuTimeout"] : 10;
             }
             catch { }
             base.Dispatcher.InvokeAsync(delegate
@@ -133,6 +137,12 @@ namespace Redadeg.lmuDataPlugin
                 lock (GetMemoryDataThreadTimeout)
                 {
                     GetMemoryDataThreadTimeout.Value = ButtonBindSettings.GetMemoryDataThreadTimeout;
+
+                }
+
+                lock (AntiFlickPitMenuTimeout)
+                {
+                    AntiFlickPitMenuTimeout.Value = ButtonBindSettings.AntiFlickPitMenuTimeout;
 
                 }
 
@@ -175,6 +185,7 @@ namespace Redadeg.lmuDataPlugin
             RealTimeClock.IsChecked = ButtonBindSettings.RealTimeClock;
             GetMemoryDataThreadTimeout.Value = ButtonBindSettings.GetMemoryDataThreadTimeout;
             DataUpdateThreadTimeout.Value = ButtonBindSettings.DataUpdateThreadTimeout;
+            AntiFlickPitMenuTimeout.Value = ButtonBindSettings.AntiFlickPitMenuTimeout;
             message_text.Text = "";
         }
 
@@ -184,7 +195,8 @@ namespace Redadeg.lmuDataPlugin
                    new JProperty("Clock_Format24", ButtonBindSettings.Clock_Format24),
                    new JProperty("RealTimeClock", ButtonBindSettings.RealTimeClock),
                    new JProperty("GetMemoryDataThreadTimeout", ButtonBindSettings.GetMemoryDataThreadTimeout),
-                   new JProperty("DataUpdateThreadTimeout", ButtonBindSettings.DataUpdateThreadTimeout));
+                   new JProperty("DataUpdateThreadTimeout", ButtonBindSettings.DataUpdateThreadTimeout),
+                   new JProperty("AntiFlickPitMenuTimeout", ButtonBindSettings.AntiFlickPitMenuTimeout)); 
             //string settings_path = AccData.path;
             try
             {
@@ -235,10 +247,16 @@ namespace Redadeg.lmuDataPlugin
             ButtonBindSettings.GetMemoryDataThreadTimeout = (int)GetMemoryDataThreadTimeout.Value;
             SaveSetting();
         }
-
+        
         private void DataUpdateThreadTimeout_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double?> e)
         {
             ButtonBindSettings.DataUpdateThreadTimeout = (int)DataUpdateThreadTimeout.Value;
+            SaveSetting();
+        }
+
+        private void AntiFlickPitMenuTimeout_ValueChanged(object sender, RoutedPropertyChangedEventArgs<double?> e)
+        {
+            ButtonBindSettings.AntiFlickPitMenuTimeout = (int)AntiFlickPitMenuTimeout.Value;
             SaveSetting();
         }
     }
@@ -267,6 +285,7 @@ namespace Redadeg.lmuDataPlugin
         public static bool Clock_Format24 { get; set; }
         public static int DataUpdateThreadTimeout { get; set; }
         public static int GetMemoryDataThreadTimeout { get; set; }
+        public static int AntiFlickPitMenuTimeout{ get; set; }
 
     }
 
