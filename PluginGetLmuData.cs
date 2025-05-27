@@ -85,7 +85,7 @@ namespace Redadeg.lmuDataPlugin
         private int updateConsuptionDelayCounter = 0;
         private bool updateConsuptionFlag = false;
         private bool NeedUpdateData = false;
-
+        private bool GetDataThreadEndWork = false;
         //JObject pitMenuJSONData;
 
         MappedBuffer<LMU_Extended> extendedBuffer = new MappedBuffer<LMU_Extended>(LMU_Constants.MM_EXTENDED_FILE_NAME, false /*partial*/, true /*skipUnchanged*/);
@@ -367,12 +367,13 @@ namespace Redadeg.lmuDataPlugin
                         if (updateConsuptionFlag)
                         {
 
-
-                            if (updateConsuptionDelayCounter < 0)
+                            //GetDataThreadEndWork wait end work, to avoid overlapping data requests
+                            if (updateConsuptionDelayCounter < 0 && GetDataThreadEndWork)
                             {
 
                                 //JObject SetupJSONdata = JObject.Parse(wc_calc.DownloadString("http://localhost:6397/rest/garage/UIScreen/RaceHistory"));
                                 JObject TireManagementJSONdata = JObject.Parse(await FetchTireManagementJSONdata());
+
                                 JObject expectedUsage = JObject.Parse(TireManagementJSONdata["expectedUsage"].ToString());
 
                                 float fuelConsumption = expectedUsage["expectedUsage"] != null ? (float)expectedUsage["expectedUsage"] : 0;
@@ -439,7 +440,7 @@ namespace Redadeg.lmuDataPlugin
                         OutFromPitFlag = false;
                         InToPitFlag = false;
                     }
-                    Thread.Sleep(ButtonBindSettings.DataUpdateThreadTimeout);
+                    await Task.Delay(ButtonBindSettings.DataUpdateThreadTimeout, ctsGetJSonDataThread.Token);
                 }
 
 
@@ -467,7 +468,7 @@ namespace Redadeg.lmuDataPlugin
                     {
                         //if (updateDataDelayCounter < 0)
                         //{
-                        //    wc = new WebClient();
+                        GetDataThreadEndWork = false;
                         try
                         {
 
@@ -786,7 +787,7 @@ namespace Redadeg.lmuDataPlugin
                         //updateDataDelayCounter = ButtonBindSettings.UpdateDataCounter;
                         NeedUpdateData = true;
                     }
-
+                    GetDataThreadEndWork = true;
                     await Task.Delay(ButtonBindSettings.DataUpdateThreadTimeout, ctsGetJSonDataThread.Token);
                 }
             }
