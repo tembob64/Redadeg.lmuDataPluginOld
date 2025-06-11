@@ -271,6 +271,9 @@ namespace Redadeg.lmuDataPlugin
         [MarshalAsAttribute(UnmanagedType.ByValArray, SizeConst = 16)]
         public byte[] mChangedParamValue;
 
+        public int mFront_ABR;
+        public int mRear_ABR;
+
         public int mPenaltyType;
         public int mPenaltyCount;
         public int mPenaltyLeftLaps;
