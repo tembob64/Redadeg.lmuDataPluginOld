@@ -376,7 +376,7 @@ namespace Redadeg.lmuDataPlugin
 
                                 JObject expectedUsage = JObject.Parse(TireManagementJSONdata["expectedUsage"].ToString());
 
-                                float fuelConsumption = expectedUsage["expectedUsage"] != null ? (float)expectedUsage["expectedUsage"] : 0;
+                                float fuelConsumption = expectedUsage["fuelConsumption"] != null ? (float)expectedUsage["fuelConsumption"] : 0;
                                 double fuelFractionPerLap = expectedUsage["fuelFractionPerLap"] != null ? (double)expectedUsage["fuelFractionPerLap"] : 0;
                                 float virtualEnergyConsumption = expectedUsage["virtualEnergyConsumption"] != null ? (float)((double)expectedUsage["virtualEnergyConsumption"] / (double)LMURepairAndRefuelData.maxVirtualEnergy * 100) : (float)0.0;
                                 double virtualEnergyFractionPerLap = expectedUsage["virtualEnergyFractionPerLap"] != null ? (double)expectedUsage["virtualEnergyFractionPerLap"] : 0;
