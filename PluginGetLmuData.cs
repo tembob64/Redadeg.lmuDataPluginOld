@@ -264,6 +264,17 @@ namespace Redadeg.lmuDataPlugin
                             pluginManager.SetPropertyValue("Redadeg.lmu.Extended.VM_REAR_ANTISWAY", this.GetType(), LMURepairAndRefuelData.VM_REAR_ANTISWAY);
                             pluginManager.SetPropertyValue("Redadeg.lmu.Extended.VM_FRONT_ANTISWAY_INT", this.GetType(), LMURepairAndRefuelData.VM_FRONT_ANTISWAY_INT);
                             pluginManager.SetPropertyValue("Redadeg.lmu.Extended.VM_REAR_ANTISWAY_INT", this.GetType(), LMURepairAndRefuelData.VM_REAR_ANTISWAY_INT);
+
+
+                            pluginManager.SetPropertyValue("Redadeg.PitstopEstimate.Damage", this.GetType(), LMURepairAndRefuelData.PitstopEstimateDamage);
+                            pluginManager.SetPropertyValue("Redadeg.PitstopEstimate.DriverSwap", this.GetType(), LMURepairAndRefuelData.PitstopEstimateDriverSwap);
+                            pluginManager.SetPropertyValue("Redadeg.PitstopEstimate.Fuel", this.GetType(), LMURepairAndRefuelData.PitstopEstimateFuel);
+                            pluginManager.SetPropertyValue("Redadeg.PitstopEstimate.VE", this.GetType(), LMURepairAndRefuelData.PitstopEstimateVE);
+                            pluginManager.SetPropertyValue("Redadeg.PitstopEstimate.Penalties", this.GetType(), LMURepairAndRefuelData.PitstopEstimatePenalties);
+                            pluginManager.SetPropertyValue("Redadeg.PitstopEstimate.Tires", this.GetType(), LMURepairAndRefuelData.PitstopEstimateTires);
+                            pluginManager.SetPropertyValue("Redadeg.PitstopEstimate.Total", this.GetType(), LMURepairAndRefuelData.PitstopEstimateTotal);
+
+
                             NeedUpdateData = false;
                         }
                         catch (Exception ex)
@@ -604,10 +615,13 @@ namespace Redadeg.lmuDataPlugin
                             await Task.Delay(ButtonBindSettings.AntiFlickPitMenuTimeout, ctsGetJSonDataThread.Token);
 
                             JObject GameStateJSONdata = JObject.Parse(await FetchGetGameStateJSONdata());
-                            await Task.Delay(ButtonBindSettings.DataUpdateThreadTimeout, ctsGetJSonDataThread.Token);
+                            await Task.Delay(ButtonBindSettings.AntiFlickPitMenuTimeout, ctsGetJSonDataThread.Token);
 
                             JObject TireMagagementJSONdata = JObject.Parse(await FetchTireManagementJSONdata());
                             await Task.Delay(ButtonBindSettings.AntiFlickPitMenuTimeout, ctsGetJSonDataThread.Token);
+
+                            JObject PitstopEstimateJSONdata = JObject.Parse(await FetchPitstopEstimateJSONdata());
+                            await Task.Delay(ButtonBindSettings.AntiFlickPitMenuTimeout, ctsGetJSonDataThread.Token);   
 
                             TireManagementJSONdataInited = true;
 
@@ -624,7 +638,17 @@ namespace Redadeg.lmuDataPlugin
                             LMURepairAndRefuelData.currentFuel = fuelInfo["currentFuel"] != null ? (int)fuelInfo["currentFuel"] : 0;
                             LMURepairAndRefuelData.timeOfDay = GameStateJSONdata["timeOfDay"] != null ? (double)GameStateJSONdata["timeOfDay"] : 0;
 
-                            JObject InfoForEventJSONdata = JObject.Parse(await FetchInfoForEventJSONdata());
+
+                            LMURepairAndRefuelData.PitstopEstimateDamage = PitstopEstimateJSONdata["damage"] != null ? (float)PitstopEstimateJSONdata["damage"] : 0;
+                            LMURepairAndRefuelData.PitstopEstimateDriverSwap = PitstopEstimateJSONdata["driverSwap"] != null ? (float)PitstopEstimateJSONdata["driverSwap"] : 0;
+                            LMURepairAndRefuelData.PitstopEstimatePenalties = PitstopEstimateJSONdata["penalties"] != null ? (float)PitstopEstimateJSONdata["penalties"] : 0;
+                            LMURepairAndRefuelData.PitstopEstimateFuel = PitstopEstimateJSONdata["fuel"] != null ? (float)Math.Round((float)PitstopEstimateJSONdata["fuel"],3) : 0;
+                            LMURepairAndRefuelData.PitstopEstimateVE = PitstopEstimateJSONdata["ve"] != null ? (float)Math.Round((float)PitstopEstimateJSONdata["ve"] , 3): 0;
+                            LMURepairAndRefuelData.PitstopEstimateTires = PitstopEstimateJSONdata["tires"] != null ? (float)PitstopEstimateJSONdata["tires"] : 0;
+                            LMURepairAndRefuelData.PitstopEstimateTotal = PitstopEstimateJSONdata["total"] != null ? (float)Math.Round((float)PitstopEstimateJSONdata["total"],3) : 0;
+                            
+
+                        JObject InfoForEventJSONdata = JObject.Parse(await FetchInfoForEventJSONdata());
                             JObject scheduledSessions = JObject.Parse(InfoForEventJSONdata.ToString());
 
                             foreach (JObject Sesstions in scheduledSessions["scheduledSessions"])
@@ -932,6 +956,21 @@ namespace Redadeg.lmuDataPlugin
             catch (TaskCanceledException)
             {
                 Logging.Current.Info(("TaskCanceledException"));
+            }
+        }
+
+        private async Task<string> FetchPitstopEstimateJSONdata()
+        {
+            try
+            {
+                var urlPitstopEstimate = "http://localhost:6397/rest/strategy/pitstop-estimate";
+                var responsePitstopEstimate = await _httpClient.GetStringAsync(urlPitstopEstimate);
+                return responsePitstopEstimate;
+            }
+            catch (Exception ex)
+            {
+                SimHub.Logging.Current.Error($"Failed to fetch Pitstop Estimate data: {ex.Message}");
+                return string.Empty; // Return an empty string in case of an error
             }
         }
 
@@ -1276,6 +1315,17 @@ namespace Redadeg.lmuDataPlugin
             pluginManager.AddProperty("Redadeg.lmu.Extended.VM_REAR_ANTISWAY", this.GetType(), "");
             pluginManager.AddProperty("Redadeg.lmu.Extended.VM_FRONT_ANTISWAY_INT", this.GetType(), 0);
             pluginManager.AddProperty("Redadeg.lmu.Extended.VM_REAR_ANTISWAY_INT", this.GetType(), 0);
+
+            pluginManager.AddProperty("Redadeg.PitstopEstimate.Damage", this.GetType(), 0);
+            pluginManager.AddProperty("Redadeg.PitstopEstimate.DriverSwap", this.GetType(), 0);
+            pluginManager.AddProperty("Redadeg.PitstopEstimate.Fuel", this.GetType(), 0);
+            pluginManager.AddProperty("Redadeg.PitstopEstimate.VE", this.GetType(), 0);
+            pluginManager.AddProperty("Redadeg.PitstopEstimate.Penalties", this.GetType(), 0);
+            pluginManager.AddProperty("Redadeg.PitstopEstimate.Tires", this.GetType(), 0);
+            pluginManager.AddProperty("Redadeg.PitstopEstimate.Total", this.GetType(), 0);
+
+
+            //{ "damage":133.99281311035156,"driverSwap":0.0,"fuel":16.07479476928711,"penalties":0.0,"tires":0.0,"total":160.39280700683594,"ve":26.399999618530273}
         }
 
         private void initFrontABRDict()
@@ -1686,8 +1736,17 @@ namespace Redadeg.lmuDataPlugin
             public static string CarModel { get; set; }
             public static string SessionTypeName { get; set; }
             public static int IsInPit { get; set; }
+            public static float PitstopEstimateDamage { get; set; }
+            public static float PitstopEstimateDriverSwap { get; set; }
+            public static float PitstopEstimateFuel { get; set; }
+            public static float PitstopEstimateVE { get; set; }
+            public static float PitstopEstimatePenalties { get; set; }
+            public static float PitstopEstimateTires { get; set; }
+            public static float PitstopEstimateTotal { get; set; }
 
-
-        }
 
     }
+
+    }
+
+
