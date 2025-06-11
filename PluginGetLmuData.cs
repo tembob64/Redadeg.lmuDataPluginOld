@@ -479,7 +479,7 @@ namespace Redadeg.lmuDataPlugin
                                 JObject carSetup = JObject.Parse(SetupJSONdata["carSetup"].ToString());
                                 JObject garageValues = JObject.Parse(carSetup["garageValues"].ToString());
                                 //  JObject pitRecommendations = JObject.Parse(JSONdata["pitRecommendations"].ToString());
-                                LMURepairAndRefuelData.VM_ANTILOCKBRAKESYSTEMMAP = garageValues["VM_ANTILOCKBRAKESYSTEMMAP"]?["stringValue"].ToString();
+                                LMURepairAndRefuelData.VM_ANTILOCKBRAKESYSTEMMAP = garageValues["VM_ANTILOCKBRAKESYSTEMMAP"]?["stringValue"].ToString().Substring(0,2).Trim();
                                 LMURepairAndRefuelData.VM_BRAKE_BALANCE = garageValues["VM_BRAKE_BALANCE"]?["stringValue"].ToString();
                                 LMURepairAndRefuelData.VM_BRAKE_MIGRATION = garageValues["VM_BRAKE_MIGRATION"]?["stringValue"].ToString();
                                 LMURepairAndRefuelData.VM_ENGINE_BRAKEMAP = garageValues["VM_ENGINE_BRAKEMAP"]?["stringValue"].ToString();
@@ -506,7 +506,7 @@ namespace Redadeg.lmuDataPlugin
                                     switch (LMURepairAndRefuelData.mChangedParamType)
                                     {
                                         case 3:
-                                            LMURepairAndRefuelData.VM_ANTILOCKBRAKESYSTEMMAP = LMURepairAndRefuelData.mChangedParamValue;
+                                            LMURepairAndRefuelData.VM_ANTILOCKBRAKESYSTEMMAP = LMURepairAndRefuelData.mChangedParamValue.Trim();
                                             break;
                                         case 10:
                                             LMURepairAndRefuelData.VM_BRAKE_BALANCE = LMURepairAndRefuelData.mChangedParamValue;
