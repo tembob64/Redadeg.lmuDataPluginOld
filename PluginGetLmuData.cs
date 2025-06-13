@@ -239,13 +239,10 @@ namespace Redadeg.lmuDataPlugin
                             pluginManager.SetPropertyValue("Redadeg.lmu.Extended.PenaltyType", this.GetType(), LMURepairAndRefuelData.PenaltyType);
                             pluginManager.SetPropertyValue("Redadeg.lmu.Extended.PenaltyCount", this.GetType(), LMURepairAndRefuelData.PenaltyCount);
 
-                            pluginManager.SetPropertyValue("Redadeg.lmu.Extended.PendingPenaltyType1", this.GetType(), LMURepairAndRefuelData.mPendingPenaltyType1);
-                            pluginManager.SetPropertyValue("Redadeg.lmu.Extended.PendingPenaltyType2", this.GetType(), LMURepairAndRefuelData.mPendingPenaltyType2);
-                            pluginManager.SetPropertyValue("Redadeg.lmu.Extended.PendingPenaltyType3", this.GetType(), LMURepairAndRefuelData.mPendingPenaltyType3);
+                            pluginManager.SetPropertyValue("Redadeg.lmu.Extended.PendingPenalty1", this.GetType(), LMURepairAndRefuelData.mPendingPenaltyType1);
+                            pluginManager.SetPropertyValue("Redadeg.lmu.Extended.PendingPenalty2", this.GetType(), LMURepairAndRefuelData.mPendingPenaltyType2);
+                            pluginManager.SetPropertyValue("Redadeg.lmu.Extended.PendingPenalty3", this.GetType(), LMURepairAndRefuelData.mPendingPenaltyType3);
 
-                            pluginManager.SetPropertyValue("Redadeg.lmu.Extended.TractionControl", this.GetType(), LMURepairAndRefuelData.mpTractionControl);
-                            pluginManager.SetPropertyValue("Redadeg.lmu.Extended.BrakeMigration", this.GetType(), LMURepairAndRefuelData.mpBrakeMigration);
-                            pluginManager.SetPropertyValue("Redadeg.lmu.Extended.BrakeMigrationMax", this.GetType(), LMURepairAndRefuelData.mpBrakeMigrationMax);
                             pluginManager.SetPropertyValue("Redadeg.lmu.Extended.MotorMap", this.GetType(), LMURepairAndRefuelData.mpMotorMap);
                             pluginManager.SetPropertyValue("Redadeg.lmu.Extended.ChangedParamValue", this.GetType(), LMURepairAndRefuelData.mChangedParamValue);
                             pluginManager.SetPropertyValue("Redadeg.lmu.Extended.ChangedParamType", this.GetType(), LMURepairAndRefuelData.mChangedParamType);
@@ -266,13 +263,13 @@ namespace Redadeg.lmuDataPlugin
                             pluginManager.SetPropertyValue("Redadeg.lmu.Extended.VM_REAR_ANTISWAY_INT", this.GetType(), LMURepairAndRefuelData.VM_REAR_ANTISWAY_INT);
 
 
-                            pluginManager.SetPropertyValue("Redadeg.PitstopEstimate.Damage", this.GetType(), LMURepairAndRefuelData.PitstopEstimateDamage);
-                            pluginManager.SetPropertyValue("Redadeg.PitstopEstimate.DriverSwap", this.GetType(), LMURepairAndRefuelData.PitstopEstimateDriverSwap);
-                            pluginManager.SetPropertyValue("Redadeg.PitstopEstimate.Fuel", this.GetType(), LMURepairAndRefuelData.PitstopEstimateFuel);
-                            pluginManager.SetPropertyValue("Redadeg.PitstopEstimate.VE", this.GetType(), LMURepairAndRefuelData.PitstopEstimateVE);
-                            pluginManager.SetPropertyValue("Redadeg.PitstopEstimate.Penalties", this.GetType(), LMURepairAndRefuelData.PitstopEstimatePenalties);
-                            pluginManager.SetPropertyValue("Redadeg.PitstopEstimate.Tires", this.GetType(), LMURepairAndRefuelData.PitstopEstimateTires);
-                            pluginManager.SetPropertyValue("Redadeg.PitstopEstimate.Total", this.GetType(), LMURepairAndRefuelData.PitstopEstimateTotal);
+                            pluginManager.SetPropertyValue("Redadeg.lmu.PitstopEstimateDamage", this.GetType(), LMURepairAndRefuelData.PitstopEstimateDamage);
+                            pluginManager.SetPropertyValue("Redadeg.lmu.PitstopEstimateDriverSwap", this.GetType(), LMURepairAndRefuelData.PitstopEstimateDriverSwap);
+                            pluginManager.SetPropertyValue("Redadeg.lmu.PitstopEstimateFuel", this.GetType(), LMURepairAndRefuelData.PitstopEstimateFuel);
+                            pluginManager.SetPropertyValue("Redadeg.lmu.PitstopEstimateVE", this.GetType(), LMURepairAndRefuelData.PitstopEstimateVE);
+                            pluginManager.SetPropertyValue("Redadeg.lmu.PitstopEstimatePenalties", this.GetType(), LMURepairAndRefuelData.PitstopEstimatePenalties);
+                            pluginManager.SetPropertyValue("Redadeg.lmu.PitstopEstimateTires", this.GetType(), LMURepairAndRefuelData.PitstopEstimateTires);
+                            pluginManager.SetPropertyValue("Redadeg.lmu.PitstopEstimateTotal", this.GetType(), LMURepairAndRefuelData.PitstopEstimateTotal);
 
 
                             NeedUpdateData = false;
@@ -1289,15 +1286,13 @@ namespace Redadeg.lmuDataPlugin
             pluginManager.AddProperty("Redadeg.lmu.Extended.PenaltyLeftLaps", this.GetType(), 0);
             pluginManager.AddProperty("Redadeg.lmu.Extended.PenaltyType", this.GetType(), 0);
             pluginManager.AddProperty("Redadeg.lmu.Extended.PenaltyCount", this.GetType(), 0);
-            pluginManager.AddProperty("Redadeg.lmu.Extended.PendingPenaltyType1", this.GetType(), 0);
-            pluginManager.AddProperty("Redadeg.lmu.Extended.PendingPenaltyType2", this.GetType(), 0);
-            pluginManager.AddProperty("Redadeg.lmu.Extended.PendingPenaltyType3", this.GetType(), 0);
-            pluginManager.AddProperty("Redadeg.lmu.Extended.TractionControl", this.GetType(), 0);
+            pluginManager.AddProperty("Redadeg.lmu.Extended.PendingPenalty1", this.GetType(), 0);
+            pluginManager.AddProperty("Redadeg.lmu.Extended.PendingPenalty2", this.GetType(), 0);
+            pluginManager.AddProperty("Redadeg.lmu.Extended.PendingPenalty3", this.GetType(), 0);
             pluginManager.AddProperty("Redadeg.lmu.Extended.MotorMap", this.GetType(), "None");
             pluginManager.AddProperty("Redadeg.lmu.Extended.ChangedParamType", this.GetType(), -1);
             pluginManager.AddProperty("Redadeg.lmu.Extended.ChangedParamValue", this.GetType(), "None");
-            pluginManager.AddProperty("Redadeg.lmu.Extended.BrakeMigration", this.GetType(), 0);
-            pluginManager.AddProperty("Redadeg.lmu.Extended.BrakeMigrationMax", this.GetType(), 0);
+
 
             pluginManager.AddProperty("Redadeg.lmu.mMessage", this.GetType(), "");
 
@@ -1316,13 +1311,14 @@ namespace Redadeg.lmuDataPlugin
             pluginManager.AddProperty("Redadeg.lmu.Extended.VM_FRONT_ANTISWAY_INT", this.GetType(), 0);
             pluginManager.AddProperty("Redadeg.lmu.Extended.VM_REAR_ANTISWAY_INT", this.GetType(), 0);
 
-            pluginManager.AddProperty("Redadeg.PitstopEstimate.Damage", this.GetType(), 0);
-            pluginManager.AddProperty("Redadeg.PitstopEstimate.DriverSwap", this.GetType(), 0);
-            pluginManager.AddProperty("Redadeg.PitstopEstimate.Fuel", this.GetType(), 0);
-            pluginManager.AddProperty("Redadeg.PitstopEstimate.VE", this.GetType(), 0);
-            pluginManager.AddProperty("Redadeg.PitstopEstimate.Penalties", this.GetType(), 0);
-            pluginManager.AddProperty("Redadeg.PitstopEstimate.Tires", this.GetType(), 0);
-            pluginManager.AddProperty("Redadeg.PitstopEstimate.Total", this.GetType(), 0);
+            //Estimate pitsstop time in seconds
+            pluginManager.AddProperty("Redadeg.lmu.PitstopEstimateDamage", this.GetType(), 0);
+            pluginManager.AddProperty("Redadeg.lmu.PitstopEstimateDriverSwap", this.GetType(), 0);
+            pluginManager.AddProperty("Redadeg.lmu.PitstopEstimateFuel", this.GetType(), 0);
+            pluginManager.AddProperty("Redadeg.lmu.PitstopEstimateVE", this.GetType(), 0);
+            pluginManager.AddProperty("Redadeg.lmu.PitstopEstimatePenalties", this.GetType(), 0);
+            pluginManager.AddProperty("Redadeg.lmu.PitstopEstimateTires", this.GetType(), 0);
+            pluginManager.AddProperty("Redadeg.lmu.PitstopEstimateTotal", this.GetType(), 0);
 
 
             //{ "damage":133.99281311035156,"driverSwap":0.0,"fuel":16.07479476928711,"penalties":0.0,"tires":0.0,"total":160.39280700683594,"ve":26.399999618530273}
