@@ -855,81 +855,124 @@ namespace Redadeg.lmuDataPlugin
 
                 while (!IsEnded)
                 {
-                    if (!this.lmu_extended_connected)
+                    if (GameRunning && curGame == "LMU" && ReguiredVluesInited)
                     {
-                        try
+                        if (!this.lmu_extended_connected)
                         {
-                            // Extended buffer is the last one constructed, so it is an indicator RF2SM is ready.
-                            this.extendedBuffer.Connect();
-                            // this.rulesBuffer.Connect();
+                            try
+                            {
+                                // Extended buffer is the last one constructed, so it is an indicator RF2SM is ready.
+                                this.extendedBuffer.Connect();
+                                // this.rulesBuffer.Connect();
 
-                            this.lmu_extended_connected = true;
-                        }
-                        catch (Exception)
-                        {
-                            LMURepairAndRefuelData.Cuts = 0;
-                            LMURepairAndRefuelData.CutsMax = 0;
-                            LMURepairAndRefuelData.PenaltyLeftLaps = 0;
-                            LMURepairAndRefuelData.PenaltyType = 0;
-                            LMURepairAndRefuelData.PenaltyCount = 0;
-                            LMURepairAndRefuelData.mPendingPenaltyType1 = 0;
-                            LMURepairAndRefuelData.mPendingPenaltyType2 = 0;
-                            LMURepairAndRefuelData.mPendingPenaltyType3 = 0;
-                            LMURepairAndRefuelData.mpBrakeMigration = 0;
-                            LMURepairAndRefuelData.mpBrakeMigrationMax = 0;
-                            LMURepairAndRefuelData.mpTractionControl = 0;
-                            LMURepairAndRefuelData.mpMotorMap = "None";
-                            LMURepairAndRefuelData.mChangedParamValue = "None";
-                            LMURepairAndRefuelData.mChangedParamType = 0;
-                            LMURepairAndRefuelData.VM_ANTILOCKBRAKESYSTEMMAP = "N/A";
-                            LMURepairAndRefuelData.VM_BRAKE_BALANCE = "N/A";
-                            LMURepairAndRefuelData.VM_BRAKE_MIGRATION = "N/A";
-                            LMURepairAndRefuelData.VM_ENGINE_BRAKEMAP = "N/A";
-                            LMURepairAndRefuelData.VM_ELECTRIC_MOTOR_MAP = "N/A";
-                            LMURepairAndRefuelData.VM_REGEN_LEVEL = "N/A";
-                            LMURepairAndRefuelData.VM_TRACTIONCONTROLMAP = "N/A";
-                            LMURepairAndRefuelData.VM_TRACTIONCONTROLPOWERCUTMAP = "N/A";
-                            LMURepairAndRefuelData.VM_TRACTIONCONTROLSLIPANGLEMAP = "N/A";
-                            LMURepairAndRefuelData.VM_FRONT_ANTISWAY = "N/A";
-                            LMURepairAndRefuelData.VM_REAR_ANTISWAY = "N/A";
-                            LMURepairAndRefuelData.VM_FRONT_ANTISWAY_INT = 0;
-                            LMURepairAndRefuelData.VM_REAR_ANTISWAY_INT = 0;
-                            this.lmu_extended_connected = false;
-                            // Logging.Current.Info("Extended data update service not connectded.");
-                        }
-                    }
-                    else
-                    {
-                        extendedBuffer.GetMappedData(ref lmu_extended);
-                        LMURepairAndRefuelData.Cuts = lmu_extended.mCuts;
-                        LMURepairAndRefuelData.CutsMax = lmu_extended.mCutsPoints;
-                        LMURepairAndRefuelData.PenaltyLeftLaps = lmu_extended.mPenaltyLeftLaps;
-                        LMURepairAndRefuelData.PenaltyType = lmu_extended.mPenaltyType;
-                        LMURepairAndRefuelData.PenaltyCount = lmu_extended.mPenaltyCount;
-                        LMURepairAndRefuelData.mPendingPenaltyType1 = lmu_extended.mPendingPenaltyType1;
-                        LMURepairAndRefuelData.mPendingPenaltyType2 = lmu_extended.mPendingPenaltyType2;
-                        LMURepairAndRefuelData.mPendingPenaltyType3 = lmu_extended.mPendingPenaltyType3;
-                        LMURepairAndRefuelData.mpBrakeMigration = lmu_extended.mpBrakeMigration;
-                        LMURepairAndRefuelData.mpBrakeMigrationMax = lmu_extended.mpBrakeMigrationMax;
-                        LMURepairAndRefuelData.mpTractionControl = lmu_extended.mpTractionControl;
-                        LMURepairAndRefuelData.mpMotorMap = GetStringFromBytes(lmu_extended.mpMotorMap);
-                        string mChangedParamValue = GetStringFromBytes(lmu_extended.mChangedParamValue).Trim();
-                        if (lmu_extended.mChangedParamType == 0 && mChangedParamValue.Equals(""))
-                        {
-                            LMURepairAndRefuelData.mChangedParamType = -1;
-                            LMURepairAndRefuelData.mChangedParamValue = "";
+                                this.lmu_extended_connected = true;
+                            }
+                            catch (Exception)
+                            {
+                                LMURepairAndRefuelData.Cuts = 0;
+                                LMURepairAndRefuelData.CutsMax = 0;
+                                LMURepairAndRefuelData.PenaltyLeftLaps = 0;
+                                LMURepairAndRefuelData.PenaltyType = 0;
+                                LMURepairAndRefuelData.PenaltyCount = 0;
+                                LMURepairAndRefuelData.mPendingPenaltyType1 = 0;
+                                LMURepairAndRefuelData.mPendingPenaltyType2 = 0;
+                                LMURepairAndRefuelData.mPendingPenaltyType3 = 0;
+                                LMURepairAndRefuelData.mpBrakeMigration = 0;
+                                LMURepairAndRefuelData.mpBrakeMigrationMax = 0;
+                                LMURepairAndRefuelData.mpTractionControl = 0;
+                                LMURepairAndRefuelData.mpMotorMap = "None";
+                                LMURepairAndRefuelData.mChangedParamValue = "None";
+                                LMURepairAndRefuelData.mChangedParamType = 0;
+                                LMURepairAndRefuelData.VM_ANTILOCKBRAKESYSTEMMAP = "N/A";
+                                LMURepairAndRefuelData.VM_BRAKE_BALANCE = "N/A";
+                                LMURepairAndRefuelData.VM_BRAKE_MIGRATION = "N/A";
+                                LMURepairAndRefuelData.VM_ENGINE_BRAKEMAP = "N/A";
+                                LMURepairAndRefuelData.VM_ELECTRIC_MOTOR_MAP = "N/A";
+                                LMURepairAndRefuelData.VM_REGEN_LEVEL = "N/A";
+                                LMURepairAndRefuelData.VM_TRACTIONCONTROLMAP = "N/A";
+                                LMURepairAndRefuelData.VM_TRACTIONCONTROLPOWERCUTMAP = "N/A";
+                                LMURepairAndRefuelData.VM_TRACTIONCONTROLSLIPANGLEMAP = "N/A";
+                                LMURepairAndRefuelData.VM_FRONT_ANTISWAY = "N/A";
+                                LMURepairAndRefuelData.VM_REAR_ANTISWAY = "N/A";
+                                LMURepairAndRefuelData.VM_FRONT_ANTISWAY_INT = 0;
+                                LMURepairAndRefuelData.VM_REAR_ANTISWAY_INT = 0;
+                                this.lmu_extended_connected = false;
+                                // Logging.Current.Info("Extended data update service not connectded.");
+                            }
                         }
                         else
                         {
-                            LMURepairAndRefuelData.mChangedParamType = lmu_extended.mChangedParamType;
-                            LMURepairAndRefuelData.mChangedParamValue = mChangedParamValue;
+                            extendedBuffer.GetMappedData(ref lmu_extended);
+                            LMURepairAndRefuelData.Cuts = lmu_extended.mCuts;
+                            LMURepairAndRefuelData.CutsMax = lmu_extended.mCutsPoints;
+                            LMURepairAndRefuelData.PenaltyLeftLaps = lmu_extended.mPenaltyLeftLaps;
+                            LMURepairAndRefuelData.PenaltyType = lmu_extended.mPenaltyType;
+                            LMURepairAndRefuelData.PenaltyCount = lmu_extended.mPenaltyCount;
+                            LMURepairAndRefuelData.mPendingPenaltyType1 = lmu_extended.mPendingPenaltyType1;
+                            LMURepairAndRefuelData.mPendingPenaltyType2 = lmu_extended.mPendingPenaltyType2;
+                            LMURepairAndRefuelData.mPendingPenaltyType3 = lmu_extended.mPendingPenaltyType3;
+                            LMURepairAndRefuelData.mpBrakeMigration = lmu_extended.mpBrakeMigration;
+                            LMURepairAndRefuelData.mpBrakeMigrationMax = lmu_extended.mpBrakeMigrationMax;
+                            LMURepairAndRefuelData.mpTractionControl = lmu_extended.mpTractionControl;
+                            LMURepairAndRefuelData.mpMotorMap = GetStringFromBytes(lmu_extended.mpMotorMap);
+                            string mChangedParamValue = GetStringFromBytes(lmu_extended.mChangedParamValue).Trim();
+                            if (lmu_extended.mChangedParamType == 0 && mChangedParamValue.Equals(""))
+                            {
+                                LMURepairAndRefuelData.mChangedParamType = -1;
+                                LMURepairAndRefuelData.mChangedParamValue = "";
+                            }
+                            else
+                            {
+                                LMURepairAndRefuelData.mChangedParamType = lmu_extended.mChangedParamType;
+                                LMURepairAndRefuelData.mChangedParamValue = mChangedParamValue;
+                            }
+                            LMURepairAndRefuelData.VM_FRONT_ANTISWAY_INT = lmu_extended.mFront_ABR;
+                            LMURepairAndRefuelData.VM_REAR_ANTISWAY_INT = lmu_extended.mRear_ABR;
+
+
+
+                            // Logging.Current.Info(("Extended data update service connectded. " +  lmu_extended.mCutsPoints.ToString() + " Penalty laps" + lmu_extended.mPenaltyLeftLaps).ToString());
                         }
-                        LMURepairAndRefuelData.VM_FRONT_ANTISWAY_INT = lmu_extended.mFront_ABR;
-                        LMURepairAndRefuelData.VM_REAR_ANTISWAY_INT = lmu_extended.mRear_ABR;
+                    }
+                    else  //game not runned clead stream values and try disconnect
+                    {
+                        try
+                        {
+                            //try disconnect if game not runned
+                            this.extendedBuffer.Disconnect(); 
+                        }
+                        catch 
+                        { }
+                      
 
-
-
-                        // Logging.Current.Info(("Extended data update service connectded. " +  lmu_extended.mCutsPoints.ToString() + " Penalty laps" + lmu_extended.mPenaltyLeftLaps).ToString());
+                        LMURepairAndRefuelData.Cuts = 0;
+                        LMURepairAndRefuelData.CutsMax = 0;
+                        LMURepairAndRefuelData.PenaltyLeftLaps = 0;
+                        LMURepairAndRefuelData.PenaltyType = 0;
+                        LMURepairAndRefuelData.PenaltyCount = 0;
+                        LMURepairAndRefuelData.mPendingPenaltyType1 = 0;
+                        LMURepairAndRefuelData.mPendingPenaltyType2 = 0;
+                        LMURepairAndRefuelData.mPendingPenaltyType3 = 0;
+                        LMURepairAndRefuelData.mpBrakeMigration = 0;
+                        LMURepairAndRefuelData.mpBrakeMigrationMax = 0;
+                        LMURepairAndRefuelData.mpTractionControl = 0;
+                        LMURepairAndRefuelData.mpMotorMap = "None";
+                        LMURepairAndRefuelData.mChangedParamValue = "None";
+                        LMURepairAndRefuelData.mChangedParamType = 0;
+                        LMURepairAndRefuelData.VM_ANTILOCKBRAKESYSTEMMAP = "N/A";
+                        LMURepairAndRefuelData.VM_BRAKE_BALANCE = "N/A";
+                        LMURepairAndRefuelData.VM_BRAKE_MIGRATION = "N/A";
+                        LMURepairAndRefuelData.VM_ENGINE_BRAKEMAP = "N/A";
+                        LMURepairAndRefuelData.VM_ELECTRIC_MOTOR_MAP = "N/A";
+                        LMURepairAndRefuelData.VM_REGEN_LEVEL = "N/A";
+                        LMURepairAndRefuelData.VM_TRACTIONCONTROLMAP = "N/A";
+                        LMURepairAndRefuelData.VM_TRACTIONCONTROLPOWERCUTMAP = "N/A";
+                        LMURepairAndRefuelData.VM_TRACTIONCONTROLSLIPANGLEMAP = "N/A";
+                        LMURepairAndRefuelData.VM_FRONT_ANTISWAY = "N/A";
+                        LMURepairAndRefuelData.VM_REAR_ANTISWAY = "N/A";
+                        LMURepairAndRefuelData.VM_FRONT_ANTISWAY_INT = 0;
+                        LMURepairAndRefuelData.VM_REAR_ANTISWAY_INT = 0;
+                        this.lmu_extended_connected = false;
                     }
 
                     // if we are connected we wait a short time before read again the memory
@@ -940,7 +983,7 @@ namespace Redadeg.lmuDataPlugin
                     // if we are not connected we wait 5 secondes before attempted a new connection 
                     else
                     {
-                        await Task.Delay(5000, cts.Token);
+                        await Task.Delay(1000, cts.Token);
                     }
 
                 }
