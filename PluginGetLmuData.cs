@@ -501,7 +501,15 @@ namespace Redadeg.lmuDataPlugin
                                 //  JObject pitRecommendations = JObject.Parse(JSONdata["pitRecommendations"].ToString());
                                 if (garageValues["VM_ANTILOCKBRAKESYSTEMMAP"]?["stringValue"].ToString().Length > 1)
                                 {
-                                    LMURepairAndRefuelData.VM_ANTILOCKBRAKESYSTEMMAP = garageValues["VM_ANTILOCKBRAKESYSTEMMAP"]?["stringValue"].ToString().Substring(0, 2).Trim();
+                                    if ((garageValues["VM_ANTILOCKBRAKESYSTEMMAP"]?["stringValue"].ToString()).Contains("N/A"))
+                                    {
+                                        LMURepairAndRefuelData.VM_ANTILOCKBRAKESYSTEMMAP = garageValues["VM_ANTILOCKBRAKESYSTEMMAP"]?["stringValue"].ToString().Trim();
+                                    }
+                                    else
+                                    {
+                                        LMURepairAndRefuelData.VM_ANTILOCKBRAKESYSTEMMAP = garageValues["VM_ANTILOCKBRAKESYSTEMMAP"]?["stringValue"].ToString().Substring(0, 2).Trim();
+                                    }
+                                    
                                 }
                                 LMURepairAndRefuelData.VM_BRAKE_BALANCE = garageValues["VM_BRAKE_BALANCE"]?["stringValue"].ToString();
                                 LMURepairAndRefuelData.VM_BRAKE_MIGRATION = garageValues["VM_BRAKE_MIGRATION"]?["stringValue"].ToString();
