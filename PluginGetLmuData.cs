@@ -88,7 +88,7 @@ namespace Redadeg.lmuDataPlugin
         private int updateDataDelayCounter = 0;
         private int updateConsuptionDelayCounter = 0;
         private bool updateConsuptionFlag = false;
-        private bool TireManagementJSONdataInited = false;
+        //private bool TireManagementJSONdataInited = false;
         
         private bool NeedUpdateData = false;
         private bool GetDataThreadEndWork = false;
@@ -121,7 +121,7 @@ namespace Redadeg.lmuDataPlugin
             {
                 loadSessionStaticInfoFromWS = true;
                 ReguiredVluesInited = false;
-                TireManagementJSONdataInited = false;
+                //TireManagementJSONdataInited = false;
             }
 
             if (data.GameRunning && !data.GameInMenu && !data.GamePaused && !StopUpdate && (data.OldData != null))
@@ -387,11 +387,11 @@ namespace Redadeg.lmuDataPlugin
                         {
 
                             //GetDataThreadEndWork wait end work, to avoid overlapping data requests
-                            if (updateConsuptionDelayCounter < 0 && GetDataThreadEndWork && TireManagementJSONdataInited)
+                            if (updateConsuptionDelayCounter < 0 && GetDataThreadEndWork)
                             {
 
                                 //JObject SetupJSONdata = JObject.Parse(wc_calc.DownloadString("http://localhost:6397/rest/garage/UIScreen/RaceHistory"));
-                               // JObject TireManagementJSONdata = JObject.Parse(await FetchTireManagementJSONdata());
+                                TireManagementJSONdata = JObject.Parse(await FetchTireManagementJSONdata());
 
                                 JObject expectedUsage = JObject.Parse(TireManagementJSONdata["expectedUsage"].ToString());
 
@@ -628,7 +628,7 @@ namespace Redadeg.lmuDataPlugin
                             JObject PitstopEstimateJSONdata = JObject.Parse(await FetchPitstopEstimateJSONdata());
                             await Task.Delay(ButtonBindSettings.AntiFlickPitMenuTimeout, ctsGetJSonDataThread.Token);   
 
-                            TireManagementJSONdataInited = true;
+                            //TireManagementJSONdataInited = true;
 
                             JObject fuelInfo = JObject.Parse(RepairAndRefuelJSONdata["fuelInfo"].ToString());
                             JObject pitStopLength = JObject.Parse(RepairAndRefuelJSONdata["pitStopLength"].ToString());
