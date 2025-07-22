@@ -1,5 +1,6 @@
 using GameReaderCommon;
 using MahApps.Metro.Behaviours;
+using Microsoft.Win32.TaskScheduler;
 using Newtonsoft.Json.Linq; // Needed for JObject
 using SimHub;
 using SimHub.Plugins;
@@ -136,6 +137,7 @@ namespace Redadeg.lmuDataPlugin
                     LMURepairAndRefuelData.IsInPit = data.OldData.IsInPit;
                     LMURepairAndRefuelData.CarClass = data.OldData.CarClass;
                     LMURepairAndRefuelData.CarModel = data.OldData.CarModel;
+                    LMURepairAndRefuelData.CarId = data.OldData.CarId;
                     ReguiredVluesInited = true;
                     //detect out from pit
                     if (data.OldData.IsInPit > data.NewData.IsInPit)
@@ -397,7 +399,7 @@ namespace Redadeg.lmuDataPlugin
         {
             try
             {
-                Task.Delay(500, ctsCalculateConsumptionsThread.Token).Wait();
+                System.Threading.Tasks.Task.Delay(500, ctsCalculateConsumptionsThread.Token).Wait();
 
                 while (!IsEnded)
                 {
@@ -501,7 +503,7 @@ namespace Redadeg.lmuDataPlugin
                         OutFromPitFlag = false;
                         InToPitFlag = false;
                     }
-                    await Task.Delay(ButtonBindSettings.DataUpdateThreadTimeout, ctsGetJSonDataThread.Token);
+                    await System.Threading.Tasks.Task.Delay(ButtonBindSettings.DataUpdateThreadTimeout, ctsGetJSonDataThread.Token);
                 }
 
 
@@ -521,7 +523,7 @@ namespace Redadeg.lmuDataPlugin
         {
             //try
             //{
-                Task.Delay(500, ctsGetJSonDataThread.Token).Wait();
+                System.Threading.Tasks.Task.Delay(500, ctsGetJSonDataThread.Token).Wait();
                 while (!IsEnded)
                 {
 
@@ -571,7 +573,7 @@ namespace Redadeg.lmuDataPlugin
                         //LMURepairAndRefuelData.VM_REAR_ANTISWAY = rearABRs[LMURepairAndRefuelData.CarModel][LMURepairAndRefuelData.VM_REAR_ANTISWAY_INT];
 
                         loadSessionStaticInfoFromWS = false;
-                                await Task.Delay(ButtonBindSettings.AntiFlickPitMenuTimeout, ctsGetJSonDataThread.Token);
+                                await System.Threading.Tasks.Task.Delay(ButtonBindSettings.AntiFlickPitMenuTimeout, ctsGetJSonDataThread.Token);
 
                                 
                             }
@@ -607,8 +609,9 @@ namespace Redadeg.lmuDataPlugin
                                             {
                                                 if (!LMURepairAndRefuelData.CarModel.Equals("Floyd Vanwall Racing Team") && LMURepairAndRefuelData.CarClass.Equals("Hyper"))
                                                 {
-                                                    LMURepairAndRefuelData.VM_FRONT_ANTISWAY = frontABRs[LMURepairAndRefuelData.CarModel][LMURepairAndRefuelData.VM_FRONT_ANTISWAY_INT];
-                                                    LMURepairAndRefuelData.VM_REAR_ANTISWAY = rearABRs[LMURepairAndRefuelData.CarModel][LMURepairAndRefuelData.VM_REAR_ANTISWAY_INT];
+                                                    String CarID = LMURepairAndRefuelData.CarModel.Split(' ')[0];
+                                                    LMURepairAndRefuelData.VM_FRONT_ANTISWAY = frontABRs[CarID][LMURepairAndRefuelData.VM_FRONT_ANTISWAY_INT];
+                                                    LMURepairAndRefuelData.VM_REAR_ANTISWAY = rearABRs[CarID][LMURepairAndRefuelData.VM_REAR_ANTISWAY_INT];
                                                 }
                                     }
                                     break;
@@ -635,8 +638,9 @@ namespace Redadeg.lmuDataPlugin
                                     //{ LMURepairAndRefuelData.VM_REAR_ANTISWAY = rearABR[LMURepairAndRefuelData.mChangedParamValue]; }
                                         if (!LMURepairAndRefuelData.CarModel.Equals("Floyd Vanwall Racing Team") && LMURepairAndRefuelData.CarClass.Equals("Hyper"))
                                         {
-                                            LMURepairAndRefuelData.VM_FRONT_ANTISWAY = frontABRs[LMURepairAndRefuelData.CarModel][LMURepairAndRefuelData.VM_FRONT_ANTISWAY_INT];
-                                            LMURepairAndRefuelData.VM_REAR_ANTISWAY = rearABRs[LMURepairAndRefuelData.CarModel][LMURepairAndRefuelData.VM_REAR_ANTISWAY_INT];
+                                         String CarID = LMURepairAndRefuelData.CarModel.Split(' ')[0];
+                                         LMURepairAndRefuelData.VM_FRONT_ANTISWAY = frontABRs[CarID][LMURepairAndRefuelData.VM_FRONT_ANTISWAY_INT];
+                                         LMURepairAndRefuelData.VM_REAR_ANTISWAY = rearABRs[CarID][LMURepairAndRefuelData.VM_REAR_ANTISWAY_INT];
                                         }
 
                                             break;
@@ -659,16 +663,16 @@ namespace Redadeg.lmuDataPlugin
                         {
                             // call LMMU Webservice and wait to calm down the api throttle and fix Menu Flickering
                             JObject RepairAndRefuelJSONdata = JObject.Parse(await FetchRepairAndRefuelJSONdata());
-                            await Task.Delay(ButtonBindSettings.AntiFlickPitMenuTimeout, ctsGetJSonDataThread.Token);
+                            await System.Threading.Tasks.Task.Delay(ButtonBindSettings.AntiFlickPitMenuTimeout, ctsGetJSonDataThread.Token);
 
                             JObject GameStateJSONdata = JObject.Parse(await FetchGetGameStateJSONdata());
-                            await Task.Delay(ButtonBindSettings.AntiFlickPitMenuTimeout, ctsGetJSonDataThread.Token);
+                            await System.Threading.Tasks.Task.Delay(ButtonBindSettings.AntiFlickPitMenuTimeout, ctsGetJSonDataThread.Token);
 
                             JObject TireMagagementJSONdata = JObject.Parse(await FetchTireManagementJSONdata());
-                            await Task.Delay(ButtonBindSettings.AntiFlickPitMenuTimeout, ctsGetJSonDataThread.Token);
+                            await System.Threading.Tasks.Task.Delay(ButtonBindSettings.AntiFlickPitMenuTimeout, ctsGetJSonDataThread.Token);
 
                             JObject PitstopEstimateJSONdata = JObject.Parse(await FetchPitstopEstimateJSONdata());
-                            await Task.Delay(ButtonBindSettings.AntiFlickPitMenuTimeout, ctsGetJSonDataThread.Token);   
+                            await System.Threading.Tasks.Task.Delay(ButtonBindSettings.AntiFlickPitMenuTimeout, ctsGetJSonDataThread.Token);   
 
                             //TireManagementJSONdataInited = true;
 
@@ -884,7 +888,7 @@ namespace Redadeg.lmuDataPlugin
                         NeedUpdateData = true;
                     }
                     GetDataThreadEndWork = true;
-                    await Task.Delay(ButtonBindSettings.DataUpdateThreadTimeout, ctsGetJSonDataThread.Token);
+                    await System.Threading.Tasks.Task.Delay(ButtonBindSettings.DataUpdateThreadTimeout, ctsGetJSonDataThread.Token);
                 }
             //}
             //catch (AggregateException)
@@ -901,7 +905,7 @@ namespace Redadeg.lmuDataPlugin
         {
             try
             {
-                Task.Delay(500, cts.Token).Wait();
+                System.Threading.Tasks.Task.Delay(500, cts.Token).Wait();
 
                 while (!IsEnded)
                 {
@@ -1028,12 +1032,12 @@ namespace Redadeg.lmuDataPlugin
                     // if we are connected we wait a short time before read again the memory
                     if (this.lmu_extended_connected)
                     {
-                        await Task.Delay(ButtonBindSettings.GetMemoryDataThreadTimeout, cts.Token);
+                        await System.Threading.Tasks.Task.Delay(ButtonBindSettings.GetMemoryDataThreadTimeout, cts.Token);
                     }
                     // if we are not connected we wait 5 secondes before attempted a new connection 
                     else
                     {
-                        await Task.Delay(1000, cts.Token);
+                        await System.Threading.Tasks.Task.Delay(1000, cts.Token);
                     }
 
                 }
@@ -1436,7 +1440,8 @@ namespace Redadeg.lmuDataPlugin
                 BMWFABRs.Add("P3");
                 BMWFABRs.Add("P4");
                 BMWFABRs.Add("P5");
-                frontABRs.Add("BMW M Team WRT 2024", BMWFABRs);
+                frontABRs.Add("BMW", BMWFABRs);
+            
 
                 //alpine 2024
                 List<string> alipineFABRs = new List<string>();
@@ -1456,7 +1461,9 @@ namespace Redadeg.lmuDataPlugin
                 alipineFABRs.Add("P13");
                 alipineFABRs.Add("P14");
 
-                frontABRs.Add("Alpine Endurance Team 2024", alipineFABRs);
+                frontABRs.Add("Aston", alipineFABRs);
+                frontABRs.Add("Alpine", alipineFABRs);
+              
 
                 //Lambo 2024
                 List<string> lamboFABRs = new List<string>();
@@ -1482,7 +1489,7 @@ namespace Redadeg.lmuDataPlugin
                 lamboFABRs.Add("20.5-TK 60deg");
                 lamboFABRs.Add("20.5-TK 90deg");
 
-                frontABRs.Add("Lamborghini Iron Lynx 2024", lamboFABRs);
+                frontABRs.Add("Lamborghini", lamboFABRs);
 
 
                 //Cadillac 2024
@@ -1493,8 +1500,8 @@ namespace Redadeg.lmuDataPlugin
                 CadillacFABRs.Add("P3");
                 CadillacFABRs.Add("P4");
                 CadillacFABRs.Add("P5");
-                frontABRs.Add("Cadillac Racing 2024", CadillacFABRs);
-                frontABRs.Add("Cadillac Racing", CadillacFABRs);
+                frontABRs.Add("Action", CadillacFABRs);
+                frontABRs.Add("Cadillac", CadillacFABRs);
 
                 //Ferrary 2024
                 List<string> FerraryFABRs = new List<string>();
@@ -1528,8 +1535,9 @@ namespace Redadeg.lmuDataPlugin
                 FerraryFABRs.Add("E-P3");
                 FerraryFABRs.Add("E-P4");
                 FerraryFABRs.Add("E-P5");
-                frontABRs.Add("Ferrari AF Corse 2024", FerraryFABRs);
-                frontABRs.Add("Ferrari AF Corse", FerraryFABRs);
+                frontABRs.Add("Ferrari", FerraryFABRs);
+                frontABRs.Add("AF", FerraryFABRs);
+        
 
                 //Porsche, Pegeout,Glickenhaus
                 List<string> PorscheFABRs = new List<string>();
@@ -1551,13 +1559,10 @@ namespace Redadeg.lmuDataPlugin
                 PorscheFABRs.Add("P13");
                 PorscheFABRs.Add("P14");
                 PorscheFABRs.Add("P15");
-                frontABRs.Add("Porsche Penske Motorsport 2024", PorscheFABRs);
-                frontABRs.Add("Porsche Penske Motorsport", PorscheFABRs);
-                frontABRs.Add("Peugeot TotalEnergies 2024", PorscheFABRs);
-                frontABRs.Add("Peugeot TotalEnergies", PorscheFABRs);
-                frontABRs.Add("Toyota Gazoo Racing 2024", PorscheFABRs);
-                frontABRs.Add("Toyota Gazoo Racing", PorscheFABRs);
-                frontABRs.Add("Glickenhaus Racing", PorscheFABRs);
+                frontABRs.Add("Porsche", PorscheFABRs);
+                frontABRs.Add("Peugeot", PorscheFABRs);
+                frontABRs.Add("Toyota", PorscheFABRs);
+                frontABRs.Add("Glickenhaus", PorscheFABRs);
 
 
                 //Isotta TIPO6 2024
@@ -1570,7 +1575,8 @@ namespace Redadeg.lmuDataPlugin
                 IsottaFABRs.Add("P5");
                 IsottaFABRs.Add("P6");
                 IsottaFABRs.Add("P7");
-                frontABRs.Add("Isotta TIPO6 2024", IsottaFABRs);
+                frontABRs.Add("Isotta", IsottaFABRs);
+
 
             }
             catch { }
@@ -1589,7 +1595,8 @@ namespace Redadeg.lmuDataPlugin
                 BMWRABRs.Add("P3");
                 BMWRABRs.Add("P4");
                 BMWRABRs.Add("P5");
-                rearABRs.Add("BMW M Team WRT 2024", BMWRABRs);
+                rearABRs.Add("BMW", BMWRABRs);
+
 
                 //alpine 2024
                 List<string> alipineRABRs = new List<string>();
@@ -1606,8 +1613,10 @@ namespace Redadeg.lmuDataPlugin
                 alipineRABRs.Add("P10");
                 alipineRABRs.Add("P11");
                 alipineRABRs.Add("P12");
-
-                rearABRs.Add("Alpine Endurance Team 2024", alipineRABRs);
+                
+                rearABRs.Add("Aston", alipineRABRs);
+                rearABRs.Add("Alpine", alipineRABRs);
+            
 
                 //Lambo 2024
                 List<string> lamboRABRs = new List<string>();
@@ -1631,7 +1640,8 @@ namespace Redadeg.lmuDataPlugin
                 lamboRABRs.Add("20.5-TK 60deg");
                 lamboRABRs.Add("20.5-TK 90deg");
 
-                rearABRs.Add("Lamborghini Iron Lynx 2024", lamboRABRs);
+                rearABRs.Add("Lamborghini", lamboRABRs);
+             
 
                 //Cadillac 2024
                 List<string> CadillacRABRs = new List<string>();
@@ -1641,8 +1651,8 @@ namespace Redadeg.lmuDataPlugin
                 CadillacRABRs.Add("P3");
                 CadillacRABRs.Add("P4");
                 CadillacRABRs.Add("P5");
-                rearABRs.Add("Cadillac Racing 2024", CadillacRABRs);
-                rearABRs.Add("Cadillac Racing", CadillacRABRs);
+                rearABRs.Add("Action", CadillacRABRs);
+                rearABRs.Add("Cadillac", CadillacRABRs);
 
 
                 //Ferrary 2024
@@ -1677,9 +1687,10 @@ namespace Redadeg.lmuDataPlugin
                 FerraryRABRs.Add("E-P3");
                 FerraryRABRs.Add("E-P4");
                 FerraryRABRs.Add("E-P5");
-                rearABRs.Add("Ferrari AF Corse 2024", FerraryRABRs);
-                rearABRs.Add("Ferrari AF Corse", FerraryRABRs);
 
+                rearABRs.Add("Ferrari", FerraryRABRs);
+                rearABRs.Add("AF", FerraryRABRs);
+              
                 //Porsche, Pegeout,Glickenhaus
                 List<string> PorscheRABRs = new List<string>();
                 PorscheRABRs.Add("Detached");
@@ -1700,13 +1711,10 @@ namespace Redadeg.lmuDataPlugin
                 PorscheRABRs.Add("P13");
                 PorscheRABRs.Add("P14");
                 PorscheRABRs.Add("P15");
-                rearABRs.Add("Porsche Penske Motorsport 2024", PorscheRABRs);
-                rearABRs.Add("Porsche Penske Motorsport", PorscheRABRs);
-                rearABRs.Add("Peugeot TotalEnergies 2024", PorscheRABRs);
-                rearABRs.Add("Peugeot TotalEnergies", PorscheRABRs);
-                rearABRs.Add("Toyota Gazoo Racing 2024", PorscheRABRs);
-                rearABRs.Add("Toyota Gazoo Racing", PorscheRABRs);
-                rearABRs.Add("Glickenhaus Racing", PorscheRABRs);
+                rearABRs.Add("Porsche", PorscheRABRs);
+                rearABRs.Add("Peugeot", PorscheRABRs);
+                rearABRs.Add("Toyota", PorscheRABRs);
+                rearABRs.Add("Glickenhaus", PorscheRABRs);
 
                 //Isotta TIPO6 2024
                 List<string> IsottaRABRs = new List<string>();
@@ -1718,7 +1726,7 @@ namespace Redadeg.lmuDataPlugin
                 IsottaRABRs.Add("P5");
                 IsottaRABRs.Add("P6");
                 IsottaRABRs.Add("P7");
-                rearABRs.Add("Isotta TIPO6 2024", IsottaRABRs);
+                rearABRs.Add("Isotta", IsottaRABRs);
             }
             catch { }
         }
@@ -1830,7 +1838,8 @@ namespace Redadeg.lmuDataPlugin
             public static int VM_FRONT_ANTISWAY_INT { get; set; }
             public static string CarClass { get; set; }
             public static string CarModel { get; set; }
-            public static string SessionTypeName { get; set; }
+        public static string CarId { get; set; }
+        public static string SessionTypeName { get; set; }
             public static int IsInPit { get; set; }
             public static float PitstopEstimateDamage { get; set; }
             public static float PitstopEstimateDriverSwap { get; set; }
