@@ -282,6 +282,15 @@ namespace Redadeg.lmuDataPlugin
         public int mPendingPenaltyType3;
         public float mCuts;
         public int mCutsPoints;
+
+        public double mCurrentBatteryValue;
+        public double mMaxBatteryValue;
+        public double mCurrentEnergyValue;
+        public double mMaxEnergyValue;
+        public double mCurrentFuelValue;
+        public double mMaxFuelValue;
+        public float mEnergyLastLap;
+        public float mFuelLastLap;
     }
 
     //////////////////////////////////////////////////////////////////////////////////////////
