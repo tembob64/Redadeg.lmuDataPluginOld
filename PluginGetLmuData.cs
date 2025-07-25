@@ -416,16 +416,11 @@ namespace Redadeg.lmuDataPlugin
 
                         //GetDataThreadEndWork wait end work, to avoid overlapping data requests
                         //  if (updateConsuptionDelayCounter < 0 && GetDataThreadEndWork)
-                        if (LMURepairAndRefuelData.extended_EnergyLastLap > 0)
+                        if (LMURepairAndRefuelData.extended_EnergyLastLap > 0 && LMURepairAndRefuelData.extended_MaxEnergyValue > 0)
                         {
                             LMURepairAndRefuelData.energyPerLastLap = (float)(LMURepairAndRefuelData.extended_EnergyLastLap / LMURepairAndRefuelData.extended_MaxEnergyValue * 100);
                             LMURepairAndRefuelData.fuelPerLastLap = LMURepairAndRefuelData.extended_FuelLastLap;
-                        }
-                        else
-                        {
-                            LMURepairAndRefuelData.energyPerLastLap = 0;
-                            LMURepairAndRefuelData.fuelPerLastLap = 0;
-                        }
+                      
 
                         if (LMURepairAndRefuelData.energyPerLastLap != LastEnergyConsumptionValueOld)
                         {
@@ -450,7 +445,7 @@ namespace Redadeg.lmuDataPlugin
 
                             if (updateConsuptionFlag && GetDataThreadEndWork)
                             {
-
+                               
                                 AddOrUpdateCircularList(EnergyConsuptions, ref EnergyCurrentIndex, LMURepairAndRefuelData.energyPerLastLap);
                                 AddOrUpdateCircularList(FuelConsuptions, ref EnergyCurrentIndex, LMURepairAndRefuelData.fuelPerLastLap);
 
@@ -512,12 +507,19 @@ namespace Redadeg.lmuDataPlugin
                                 {
                                     LMURepairAndRefuelData.energyPerLast5ClearLap = 0;
                                 }
-
+                                LastEnergyConsumptionValueOld = LMURepairAndRefuelData.energyPerLastLap;
                                 updateConsuptionFlag = false;
                                 updateConsuptionDelayCounter = 50;
                             }
-                            LastEnergyConsumptionValueOld = LMURepairAndRefuelData.energyPerLastLap;
+                            }
                         }
+                            else
+                            {
+                                LMURepairAndRefuelData.energyPerLastLap = 0;
+                                LMURepairAndRefuelData.fuelPerLastLap = 0;
+                            }
+                       
+
                             // Logging.Current.Info("Last Lap: " + lastLapTime.ToString() + " updateConsuptionDelayCounter: " + updateConsuptionDelayCounter.ToString() + " virtualEnergyConsumption: " + virtualEnergyConsumption.ToString());
 
                             updateConsuptionDelayCounter--;
