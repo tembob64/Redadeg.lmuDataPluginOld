@@ -1,11 +1,10 @@
 using GameReaderCommon;
-using MahApps.Metro.Behaviours;
-using Microsoft.Win32.TaskScheduler;
+//using MahApps.Metro.Behaviours;
 using Newtonsoft.Json.Linq; // Needed for JObject
 using SimHub;
 using SimHub.Plugins;
-using SimHub.Plugins.DataPlugins.DataCore;
-using SimHub.Plugins.OutputPlugins.GraphicalDash.Models.BuiltIn;
+//using SimHub.Plugins.DataPlugins.DataCore;
+//using SimHub.Plugins.OutputPlugins.GraphicalDash.Models.BuiltIn;
 using System;
 using System.Collections.Generic;
 using System.IO;    // Need for read/write JSON settings file
@@ -14,9 +13,9 @@ using System.Net.Http;
 using System.Text;  //For File Encoding
 using System.Threading;
 using System.Threading.Tasks;
-using System.Windows.Shapes;
-using WoteverCommon.Extensions;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
+//using System.Windows.Shapes;
+//using WoteverCommon.Extensions;
+//using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
 
 
 
@@ -403,49 +402,48 @@ namespace Redadeg.lmuDataPlugin
         private async void lmu_CalculateConsumptionsThread()
 
         {
-            try
-            {
+
                 System.Threading.Tasks.Task.Delay(500, ctsCalculateConsumptionsThread.Token).Wait();
 
                 while (!IsEnded)
                 {
-                    if (GameRunning && !GameInMenu && !GamePaused && curGame == "LMU")
-                    {
-                        //if (updateConsuptionFlag)
-                        //{
+                if (GameRunning && !GameInMenu && !GamePaused && curGame == "LMU")
+                {
+                    //    //if (updateConsuptionFlag)
+                    //    //{
 
-                        //GetDataThreadEndWork wait end work, to avoid overlapping data requests
-                        //  if (updateConsuptionDelayCounter < 0 && GetDataThreadEndWork)
-                        if (LMURepairAndRefuelData.extended_EnergyLastLap > 0 && LMURepairAndRefuelData.extended_MaxEnergyValue > 0)
-                        {
-                            LMURepairAndRefuelData.energyPerLastLap = (float)(LMURepairAndRefuelData.extended_EnergyLastLap / LMURepairAndRefuelData.extended_MaxEnergyValue * 100);
-                            LMURepairAndRefuelData.fuelPerLastLap = LMURepairAndRefuelData.extended_FuelLastLap;
-                      
+                    //    //GetDataThreadEndWork wait end work, to avoid overlapping data requests
+                    //    //  if (updateConsuptionDelayCounter < 0 && GetDataThreadEndWork)
+                    if (LMURepairAndRefuelData.extended_EnergyLastLap > 0 && LMURepairAndRefuelData.extended_MaxEnergyValue > 0)
+                    {
+                        LMURepairAndRefuelData.energyPerLastLap = (float)(LMURepairAndRefuelData.extended_EnergyLastLap / LMURepairAndRefuelData.extended_MaxEnergyValue * 100);
+                        LMURepairAndRefuelData.fuelPerLastLap = LMURepairAndRefuelData.extended_FuelLastLap;
+
 
                         if (LMURepairAndRefuelData.energyPerLastLap != LastEnergyConsumptionValueOld)
                         {
 
-                            //JObject SetupJSONdata = JObject.Parse(wc_calc.DownloadString("http://localhost:6397/rest/garage/UIScreen/RaceHistory"));
-                            //JObject TireManagementJSONdata = JObject.Parse(await FetchTireManagementJSONdata());
+                            //        //JObject SetupJSONdata = JObject.Parse(wc_calc.DownloadString("http://localhost:6397/rest/garage/UIScreen/RaceHistory"));
+                            //        //JObject TireManagementJSONdata = JObject.Parse(await FetchTireManagementJSONdata());
 
-                            //JObject expectedUsage = JObject.Parse(TireManagementJSONdata["expectedUsage"].ToString());
+                            //        //JObject expectedUsage = JObject.Parse(TireManagementJSONdata["expectedUsage"].ToString());
 
-                            //float fuelConsumption = expectedUsage["fuelConsumption"] != null ? (float)expectedUsage["fuelConsumption"] : 0;
-                            //double fuelFractionPerLap = expectedUsage["fuelFractionPerLap"] != null ? (double)expectedUsage["fuelFractionPerLap"] : 0;
-                            //float virtualEnergyConsumption = expectedUsage["virtualEnergyConsumption"] != null ? (float)((double)expectedUsage["virtualEnergyConsumption"] / (double)LMURepairAndRefuelData.maxVirtualEnergy * 100) : (float)0.0;
-                            //double virtualEnergyFractionPerLap = expectedUsage["virtualEnergyFractionPerLap"] != null ? (double)expectedUsage["virtualEnergyFractionPerLap"] : 0;
+                            //        //float fuelConsumption = expectedUsage["fuelConsumption"] != null ? (float)expectedUsage["fuelConsumption"] : 0;
+                            //        //double fuelFractionPerLap = expectedUsage["fuelFractionPerLap"] != null ? (double)expectedUsage["fuelFractionPerLap"] : 0;
+                            //        //float virtualEnergyConsumption = expectedUsage["virtualEnergyConsumption"] != null ? (float)((double)expectedUsage["virtualEnergyConsumption"] / (double)LMURepairAndRefuelData.maxVirtualEnergy * 100) : (float)0.0;
+                            //        //double virtualEnergyFractionPerLap = expectedUsage["virtualEnergyFractionPerLap"] != null ? (double)expectedUsage["virtualEnergyFractionPerLap"] : 0;
 
-                            //JObject raceHistory = JObject.Parse(SetupJSONdata["raceHistory"].ToString());
-                            //double LastLapConsumption = 0;
-                            //int lapsCompletedCount = 0;
+                            //        //JObject raceHistory = JObject.Parse(SetupJSONdata["raceHistory"].ToString());
+                            //        //double LastLapConsumption = 0;
+                            //        //int lapsCompletedCount = 0;
 
-                            //EnergyConsuptions.Clear();
-                            //FuelConsuptions.Clear();
-                            //LapTimes.Clear();
+                            //        //EnergyConsuptions.Clear();
+                            //        //FuelConsuptions.Clear();
+                            //        //LapTimes.Clear();
 
                             if (updateConsuptionFlag && GetDataThreadEndWork)
                             {
-                               
+
                                 AddOrUpdateCircularList(EnergyConsuptions, ref EnergyCurrentIndex, LMURepairAndRefuelData.energyPerLastLap);
                                 AddOrUpdateCircularList(FuelConsuptions, ref EnergyCurrentIndex, LMURepairAndRefuelData.fuelPerLastLap);
 
@@ -466,26 +464,6 @@ namespace Redadeg.lmuDataPlugin
                                     AddOrUpdateCircularList(LapTimes, ref ClearEnergyCurrentIndex, (float)lastLapTime);
                                     AddOrUpdateCircularList(ClearEnergyConsuptions, ref ClearEnergyCurrentIndex, LMURepairAndRefuelData.energyPerLastLap);
                                     AddOrUpdateCircularList(ClearFuelConsuptions, ref ClearEnergyCurrentIndex, LMURepairAndRefuelData.fuelPerLastLap);
-
-
-
-
-                                    //if (LapTimes.Count < 5)
-                                    //{
-                                    //    energy_CurrentIndex++;
-                                    //    ClearEnergyConsuptions.Add(virtualEnergyConsumption);
-                                    //    FuelConsuptions.Add(fuelConsumption);
-                                    //    LapTimes.Add((float)lastLapTime);
-
-                                    //}
-                                    //else if (LapTimes.Count == 5)
-                                    //{
-                                    //    energy_CurrentIndex++;
-                                    //    if (energy_CurrentIndex > 4) energy_CurrentIndex = 0;
-                                    //    LapTimes[energy_CurrentIndex] = (float)lastLapTime;
-                                    //    ClearEnergyConsuptions[energy_CurrentIndex] = virtualEnergyConsumption;
-                                    //    FuelConsuptions[energy_CurrentIndex] = fuelConsumption;
-                                    //}
                                 }
                                 // Logging.Current.Info("Last Lap: " + lastLapTime.ToString() + " virtualEnergyConsumption: " + virtualEnergyConsumption.ToString() + " Raw: " + (expectedUsage["virtualEnergyConsumption"] != null ? (float)(double)expectedUsage["virtualEnergyConsumption"] : 0).ToString());
                                 if (EnergyConsuptions.Count() > 0)
@@ -510,37 +488,28 @@ namespace Redadeg.lmuDataPlugin
                                 LastEnergyConsumptionValueOld = LMURepairAndRefuelData.energyPerLastLap;
                                 updateConsuptionFlag = false;
                                 updateConsuptionDelayCounter = 50;
-                            }
+                                NeedUpdateData = true;
                             }
                         }
-                            else
-                            {
-                                LMURepairAndRefuelData.energyPerLastLap = 0;
-                                LMURepairAndRefuelData.fuelPerLastLap = 0;
-                            }
-                       
-
-                            // Logging.Current.Info("Last Lap: " + lastLapTime.ToString() + " updateConsuptionDelayCounter: " + updateConsuptionDelayCounter.ToString() + " virtualEnergyConsumption: " + virtualEnergyConsumption.ToString());
-
-                            updateConsuptionDelayCounter--;
+                        else
+                        {
+                            LMURepairAndRefuelData.energyPerLastLap = 0;
+                            LMURepairAndRefuelData.fuelPerLastLap = 0;
                         }
-                        OutFromPitFlag = false;
-                        InToPitFlag = false;
-                    }
-                    await System.Threading.Tasks.Task.Delay(ButtonBindSettings.DataUpdateThreadTimeout, ctsGetJSonDataThread.Token);
-               // }
+
+
+                        //        // Logging.Current.Info("Last Lap: " + lastLapTime.ToString() + " updateConsuptionDelayCounter: " + updateConsuptionDelayCounter.ToString() + " virtualEnergyConsumption: " + virtualEnergyConsumption.ToString());
+
+                        updateConsuptionDelayCounter--;
+                }
+                OutFromPitFlag = false;
+                InToPitFlag = false;
+            }
+                    await Task.Delay(ButtonBindSettings.DataUpdateThreadTimeout, ctsGetJSonDataThread.Token);
+               }
 
 
 
-            }
-            catch (AggregateException)
-            {
-                Logging.Current.Info(("AggregateException"));
-            }
-            catch (TaskCanceledException)
-            {
-                Logging.Current.Info(("TaskCanceledException"));
-            }
         }
 
         private async void lmu_GetJSonDataThread()
@@ -884,42 +853,42 @@ namespace Redadeg.lmuDataPlugin
 
 
 
-                        try
-                        {
+                        //try
+                        //{
 
 
-                            if (ClearEnergyConsuptions.Count() > 0 && LapTimes.Count() > 0 && LMURepairAndRefuelData.maxVirtualEnergy > 0)
-                            {
-                                float virtualErg = (float)LMURepairAndRefuelData.currentVirtualEnergy / (float)LMURepairAndRefuelData.maxVirtualEnergy * 100;
-                                LMURepairAndRefuelData.energyTimeElapsed = (LapTimes.Average() * virtualErg / ClearEnergyConsuptions.Average()) / 60;
-                                LMURepairAndRefuelData.VirtualEnergy = virtualErg;
-                                //LTime ConsumAvg
-                                //      Energy    
-                            }
+                        //    //if (ClearEnergyConsuptions.Count() > 0 && LapTimes.Count() > 0 && LMURepairAndRefuelData.maxVirtualEnergy > 0)
+                        //    //{
+                        //    //    float virtualErg = (float)LMURepairAndRefuelData.currentVirtualEnergy / (float)LMURepairAndRefuelData.maxVirtualEnergy * 100;
+                        //    //    LMURepairAndRefuelData.energyTimeElapsed = (LapTimes.Average() * virtualErg / ClearEnergyConsuptions.Average()) / 60;
+                        //    //    LMURepairAndRefuelData.VirtualEnergy = virtualErg;
+                        //    //    //LTime ConsumAvg
+                        //    //    //      Energy    
+                        //    //}
 
-                            if (EnergyConsuptions.Count() > 0)
-                            {
-                                LMURepairAndRefuelData.energyPerLast5Lap = (float)EnergyConsuptions.Average();
-                            }
-                            else
-                            {
-                                LMURepairAndRefuelData.energyPerLast5Lap = 0;
-                            }
+                        //    //if (EnergyConsuptions.Count() > 0)
+                        //    //{
+                        //    //    LMURepairAndRefuelData.energyPerLast5Lap = (float)EnergyConsuptions.Average();
+                        //    //}
+                        //    //else
+                        //    //{
+                        //    //    LMURepairAndRefuelData.energyPerLast5Lap = 0;
+                        //    //}
 
-                            if (ClearEnergyConsuptions.Count() > 0)
-                            {
-                                LMURepairAndRefuelData.energyPerLast5ClearLap = (float)ClearEnergyConsuptions.Average();
-                            }
-                            else
-                            {
-                                LMURepairAndRefuelData.energyPerLast5ClearLap = 0;
-                            }
-                        }
-                        catch (Exception ex)
-                        {
-                            Logging.Current.Info("SectorChange: " + ex.ToString());
+                        //    //if (ClearEnergyConsuptions.Count() > 0)
+                        //    //{
+                        //    //    LMURepairAndRefuelData.energyPerLast5ClearLap = (float)ClearEnergyConsuptions.Average();
+                        //    //}
+                        //    //else
+                        //    //{
+                        //    //    LMURepairAndRefuelData.energyPerLast5ClearLap = 0;
+                        //    //}
+                        //}
+                        //catch (Exception ex)
+                        //{
+                        //    Logging.Current.Info("SectorChange: " + ex.ToString());
 
-                        }
+                        //}
                         //updateDataDelayCounter = ButtonBindSettings.UpdateDataCounter;
                         NeedUpdateData = true;
                     }
@@ -1091,7 +1060,7 @@ namespace Redadeg.lmuDataPlugin
                     // if we are not connected we wait 5 secondes before attempted a new connection 
                     else
                     {
-                        await System.Threading.Tasks.Task.Delay(1000, cts.Token);
+                        await System.Threading.Tasks.Task.Delay(2000, cts.Token);
                     }
 
                 }
@@ -1342,10 +1311,10 @@ namespace Redadeg.lmuDataPlugin
         {
 
             _httpClient = new HttpClient();
-            LapTimes = new List<float>();
-            EnergyConsuptions = new List<float>();
-            ClearEnergyConsuptions = new List<float>();
-            FuelConsuptions = new List<float>();
+            //LapTimes = new List<float>();
+            //EnergyConsuptions = new List<float>();
+            //ClearEnergyConsuptions = new List<float>();
+            //FuelConsuptions = new List<float>();
             // set path/filename for settings file
             LMURepairAndRefuelData.path = PluginManager.GetCommonStoragePath(PLUGIN_CONFIG_FILENAME);
             //string path_data = PluginManager.GetCommonStoragePath("Redadeg.lmuDataPlugin.data.json");
