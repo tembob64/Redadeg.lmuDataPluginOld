@@ -56,8 +56,8 @@ namespace Redadeg.lmuDataPlugin
         private bool GameRunning = false;
         private bool GamePaused = true;
 
-        private Dictionary<string, List<string>> rearABRs;
-        private Dictionary<string, List<string>> frontABRs;
+        private Dictionary<string, List<string>> rearARBs;
+        private Dictionary<string, List<string>> frontARBs;
         //    int[] lapsForCalculate = new int[] { };
         private Guid SessionId;
 
@@ -491,18 +491,19 @@ namespace Redadeg.lmuDataPlugin
                                 NeedUpdateData = true;
                             }
                         }
-                        else
-                        {
-                            LMURepairAndRefuelData.energyPerLastLap = 0;
-                            LMURepairAndRefuelData.fuelPerLastLap = 0;
-                        }
+                       
 
 
                         //        // Logging.Current.Info("Last Lap: " + lastLapTime.ToString() + " updateConsuptionDelayCounter: " + updateConsuptionDelayCounter.ToString() + " virtualEnergyConsumption: " + virtualEnergyConsumption.ToString());
 
                         updateConsuptionDelayCounter--;
-                }
-                OutFromPitFlag = false;
+                    }
+                    else
+                    {
+                        LMURepairAndRefuelData.energyPerLastLap = 0;
+                        LMURepairAndRefuelData.fuelPerLastLap = 0;
+                    }
+                    OutFromPitFlag = false;
                 InToPitFlag = false;
             }
                     await Task.Delay(ButtonBindSettings.DataUpdateThreadTimeout, ctsGetJSonDataThread.Token);
@@ -562,8 +563,8 @@ namespace Redadeg.lmuDataPlugin
                                 LMURepairAndRefuelData.VM_TRACTIONCONTROLSLIPANGLEMAP = garageValues["VM_TRACTIONCONTROLSLIPANGLEMAP"]?["stringValue"].ToString();
                                 LMURepairAndRefuelData.VM_FRONT_ANTISWAY = garageValues["VM_FRONT_ANTISWAY"]?["stringValue"].ToString();
                                 LMURepairAndRefuelData.VM_REAR_ANTISWAY = garageValues["VM_REAR_ANTISWAY"]?["stringValue"].ToString();
-                        //LMURepairAndRefuelData.VM_FRONT_ANTISWAY = frontABRs[LMURepairAndRefuelData.CarModel][LMURepairAndRefuelData.VM_FRONT_ANTISWAY_INT];
-                        //LMURepairAndRefuelData.VM_REAR_ANTISWAY = rearABRs[LMURepairAndRefuelData.CarModel][LMURepairAndRefuelData.VM_REAR_ANTISWAY_INT];
+                        //LMURepairAndRefuelData.VM_FRONT_ANTISWAY = frontARBs[LMURepairAndRefuelData.CarModel][LMURepairAndRefuelData.VM_FRONT_ANTISWAY_INT];
+                        //LMURepairAndRefuelData.VM_REAR_ANTISWAY = rearARBs[LMURepairAndRefuelData.CarModel][LMURepairAndRefuelData.VM_REAR_ANTISWAY_INT];
 
                         loadSessionStaticInfoFromWS = false;
                                 await System.Threading.Tasks.Task.Delay(ButtonBindSettings.AntiFlickPitMenuTimeout, ctsGetJSonDataThread.Token);
@@ -603,9 +604,17 @@ namespace Redadeg.lmuDataPlugin
                                                 if (!LMURepairAndRefuelData.CarModel.Equals("Floyd Vanwall Racing Team") && LMURepairAndRefuelData.CarClass.Equals("Hyper"))
                                                 {
                                                     String CarID = LMURepairAndRefuelData.CarModel.Split(' ')[0];
-                                                    LMURepairAndRefuelData.VM_FRONT_ANTISWAY = frontABRs[CarID][LMURepairAndRefuelData.VM_FRONT_ANTISWAY_INT];
-                                                    LMURepairAndRefuelData.VM_REAR_ANTISWAY = rearABRs[CarID][LMURepairAndRefuelData.VM_REAR_ANTISWAY_INT];
-                                                }
+                                            try
+                                            { 
+                                                    LMURepairAndRefuelData.VM_FRONT_ANTISWAY = frontARBs[CarID][LMURepairAndRefuelData.VM_FRONT_ANTISWAY_INT];
+                                                    LMURepairAndRefuelData.VM_REAR_ANTISWAY = rearARBs[CarID][LMURepairAndRefuelData.VM_REAR_ANTISWAY_INT];
+                                            }
+                                            catch (Exception ex)
+                                            {
+                                                Logging.Current.Error("ARBs: " + ex.Message);
+                                            }
+
+                                        }
                                     }
                                     break;
                                         case 11:
@@ -632,8 +641,15 @@ namespace Redadeg.lmuDataPlugin
                                         if (!LMURepairAndRefuelData.CarModel.Equals("Floyd Vanwall Racing Team") && LMURepairAndRefuelData.CarClass.Equals("Hyper"))
                                         {
                                          String CarID = LMURepairAndRefuelData.CarModel.Split(' ')[0];
-                                         LMURepairAndRefuelData.VM_FRONT_ANTISWAY = frontABRs[CarID][LMURepairAndRefuelData.VM_FRONT_ANTISWAY_INT];
-                                         LMURepairAndRefuelData.VM_REAR_ANTISWAY = rearABRs[CarID][LMURepairAndRefuelData.VM_REAR_ANTISWAY_INT];
+                                        try
+                                        {
+                                            LMURepairAndRefuelData.VM_FRONT_ANTISWAY = frontARBs[CarID][LMURepairAndRefuelData.VM_FRONT_ANTISWAY_INT];
+                                            LMURepairAndRefuelData.VM_REAR_ANTISWAY = rearARBs[CarID][LMURepairAndRefuelData.VM_REAR_ANTISWAY_INT];
+                                        }
+                                        catch (Exception ex)
+                                        {
+                                            Logging.Current.Error("ARBs: " + ex.Message);
+                                        }
                                         }
 
                                             break;
@@ -1456,155 +1472,155 @@ namespace Redadeg.lmuDataPlugin
 
         private void initFrontABRDict()
         {
-            frontABRs = new Dictionary<string, List<string>>();
+            frontARBs = new Dictionary<string, List<string>>();
             try
             {
 
 
                 //BMW 2024
-                List<string> BMWFABRs = new List<string>();
-                BMWFABRs.Add("Detached");
-                BMWFABRs.Add("P1");
-                BMWFABRs.Add("P2");
-                BMWFABRs.Add("P3");
-                BMWFABRs.Add("P4");
-                BMWFABRs.Add("P5");
-                frontABRs.Add("BMW", BMWFABRs);
+                List<string> BMWFARBs = new List<string>();
+                BMWFARBs.Add("Detached");
+                BMWFARBs.Add("P1");
+                BMWFARBs.Add("P2");
+                BMWFARBs.Add("P3");
+                BMWFARBs.Add("P4");
+                BMWFARBs.Add("P5");
+                frontARBs.Add("BMW", BMWFARBs);
             
 
                 //alpine 2024
-                List<string> alipineFABRs = new List<string>();
-                alipineFABRs.Add("Detached");
-                alipineFABRs.Add("P1");
-                alipineFABRs.Add("P2");
-                alipineFABRs.Add("P3");
-                alipineFABRs.Add("P4");
-                alipineFABRs.Add("P5");
-                alipineFABRs.Add("P6");
-                alipineFABRs.Add("P7");
-                alipineFABRs.Add("P8");
-                alipineFABRs.Add("P9");
-                alipineFABRs.Add("P10");
-                alipineFABRs.Add("P11");
-                alipineFABRs.Add("P12");
-                alipineFABRs.Add("P13");
-                alipineFABRs.Add("P14");
+                List<string> alipineFARBs = new List<string>();
+                alipineFARBs.Add("Detached");
+                alipineFARBs.Add("P1");
+                alipineFARBs.Add("P2");
+                alipineFARBs.Add("P3");
+                alipineFARBs.Add("P4");
+                alipineFARBs.Add("P5");
+                alipineFARBs.Add("P6");
+                alipineFARBs.Add("P7");
+                alipineFARBs.Add("P8");
+                alipineFARBs.Add("P9");
+                alipineFARBs.Add("P10");
+                alipineFARBs.Add("P11");
+                alipineFARBs.Add("P12");
+                alipineFARBs.Add("P13");
+                alipineFARBs.Add("P14");
 
-                frontABRs.Add("Aston", alipineFABRs);
-                frontABRs.Add("Alpine", alipineFABRs);
+                frontARBs.Add("Aston", alipineFARBs);
+                frontARBs.Add("Alpine", alipineFARBs);
               
 
                 //Lambo 2024
-                List<string> lamboFABRs = new List<string>();
-                lamboFABRs.Add("Detached");
-                lamboFABRs.Add("14.5-TK 0deg");
-                lamboFABRs.Add("14.5-TK 30deg");
-                lamboFABRs.Add("14.5-TK 45deg");
-                lamboFABRs.Add("14.5-TK 60deg");
-                lamboFABRs.Add("14.5-TK 90deg");
-                lamboFABRs.Add("16-TK 0deg");
-                lamboFABRs.Add("16-TK 30deg");
-                lamboFABRs.Add("16-TK 45deg");
-                lamboFABRs.Add("16-TK 60deg");
-                lamboFABRs.Add("16-TK 90deg");
-                lamboFABRs.Add("17.5-TK 0deg");
-                lamboFABRs.Add("17.5-TK 30deg");
-                lamboFABRs.Add("17.5-TK 45deg");
-                lamboFABRs.Add("17.5-TK 60deg");
-                lamboFABRs.Add("17.5-TK 90deg");
-                lamboFABRs.Add("20.5-TK 0deg");
-                lamboFABRs.Add("20.5-TK 30deg");
-                lamboFABRs.Add("20.5-TK 45deg");
-                lamboFABRs.Add("20.5-TK 60deg");
-                lamboFABRs.Add("20.5-TK 90deg");
+                List<string> lamboFARBs = new List<string>();
+                lamboFARBs.Add("Detached");
+                lamboFARBs.Add("14.5-TK 0deg");
+                lamboFARBs.Add("14.5-TK 30deg");
+                lamboFARBs.Add("14.5-TK 45deg");
+                lamboFARBs.Add("14.5-TK 60deg");
+                lamboFARBs.Add("14.5-TK 90deg");
+                lamboFARBs.Add("16-TK 0deg");
+                lamboFARBs.Add("16-TK 30deg");
+                lamboFARBs.Add("16-TK 45deg");
+                lamboFARBs.Add("16-TK 60deg");
+                lamboFARBs.Add("16-TK 90deg");
+                lamboFARBs.Add("17.5-TK 0deg");
+                lamboFARBs.Add("17.5-TK 30deg");
+                lamboFARBs.Add("17.5-TK 45deg");
+                lamboFARBs.Add("17.5-TK 60deg");
+                lamboFARBs.Add("17.5-TK 90deg");
+                lamboFARBs.Add("20.5-TK 0deg");
+                lamboFARBs.Add("20.5-TK 30deg");
+                lamboFARBs.Add("20.5-TK 45deg");
+                lamboFARBs.Add("20.5-TK 60deg");
+                lamboFARBs.Add("20.5-TK 90deg");
 
-                frontABRs.Add("Lamborghini", lamboFABRs);
+                frontARBs.Add("Lamborghini", lamboFARBs);
 
 
                 //Cadillac 2024
-                List<string> CadillacFABRs = new List<string>();
-                CadillacFABRs.Add("Detached");
-                CadillacFABRs.Add("P1");
-                CadillacFABRs.Add("P2");
-                CadillacFABRs.Add("P3");
-                CadillacFABRs.Add("P4");
-                CadillacFABRs.Add("P5");
-                frontABRs.Add("Action", CadillacFABRs);
-                frontABRs.Add("Cadillac", CadillacFABRs);
+                List<string> CadillacFARBs = new List<string>();
+                CadillacFARBs.Add("Detached");
+                CadillacFARBs.Add("P1");
+                CadillacFARBs.Add("P2");
+                CadillacFARBs.Add("P3");
+                CadillacFARBs.Add("P4");
+                CadillacFARBs.Add("P5");
+                frontARBs.Add("Action", CadillacFARBs);
+                frontARBs.Add("Cadillac", CadillacFARBs);
 
                 //Ferrary 2024
-                List<string> FerraryFABRs = new List<string>();
-                FerraryFABRs.Add("Detached");
-                FerraryFABRs.Add("A-P1");
-                FerraryFABRs.Add("A-P2");
-                FerraryFABRs.Add("A-P3");
-                FerraryFABRs.Add("A-P4");
-                FerraryFABRs.Add("A-P5");
+                List<string> FerraryFARBs = new List<string>();
+                FerraryFARBs.Add("Detached");
+                FerraryFARBs.Add("A-P1");
+                FerraryFARBs.Add("A-P2");
+                FerraryFARBs.Add("A-P3");
+                FerraryFARBs.Add("A-P4");
+                FerraryFARBs.Add("A-P5");
 
-                FerraryFABRs.Add("B-P1");
-                FerraryFABRs.Add("B-P2");
-                FerraryFABRs.Add("B-P3");
-                FerraryFABRs.Add("B-P4");
-                FerraryFABRs.Add("B-P5");
+                FerraryFARBs.Add("B-P1");
+                FerraryFARBs.Add("B-P2");
+                FerraryFARBs.Add("B-P3");
+                FerraryFARBs.Add("B-P4");
+                FerraryFARBs.Add("B-P5");
 
-                FerraryFABRs.Add("C-P1");
-                FerraryFABRs.Add("C-P2");
-                FerraryFABRs.Add("C-P3");
-                FerraryFABRs.Add("C-P4");
-                FerraryFABRs.Add("C-P5");
+                FerraryFARBs.Add("C-P1");
+                FerraryFARBs.Add("C-P2");
+                FerraryFARBs.Add("C-P3");
+                FerraryFARBs.Add("C-P4");
+                FerraryFARBs.Add("C-P5");
 
-                FerraryFABRs.Add("D-P1");
-                FerraryFABRs.Add("D-P2");
-                FerraryFABRs.Add("D-P3");
-                FerraryFABRs.Add("D-P4");
-                FerraryFABRs.Add("D-P5");
+                FerraryFARBs.Add("D-P1");
+                FerraryFARBs.Add("D-P2");
+                FerraryFARBs.Add("D-P3");
+                FerraryFARBs.Add("D-P4");
+                FerraryFARBs.Add("D-P5");
 
-                FerraryFABRs.Add("E-P1");
-                FerraryFABRs.Add("E-P2");
-                FerraryFABRs.Add("E-P3");
-                FerraryFABRs.Add("E-P4");
-                FerraryFABRs.Add("E-P5");
-                frontABRs.Add("Ferrari", FerraryFABRs);
-                frontABRs.Add("AF", FerraryFABRs);
+                FerraryFARBs.Add("E-P1");
+                FerraryFARBs.Add("E-P2");
+                FerraryFARBs.Add("E-P3");
+                FerraryFARBs.Add("E-P4");
+                FerraryFARBs.Add("E-P5");
+                frontARBs.Add("Ferrari", FerraryFARBs);
+                frontARBs.Add("AF", FerraryFARBs);
         
 
                 //Porsche, Pegeout,Glickenhaus
-                List<string> PorscheFABRs = new List<string>();
-                PorscheFABRs.Add("Detached");
-                PorscheFABRs.Add("P1");
-                PorscheFABRs.Add("P2");
-                PorscheFABRs.Add("P3");
-                PorscheFABRs.Add("P4");
-                PorscheFABRs.Add("P5");
+                List<string> PorscheFARBs = new List<string>();
+                PorscheFARBs.Add("Detached");
+                PorscheFARBs.Add("P1");
+                PorscheFARBs.Add("P2");
+                PorscheFARBs.Add("P3");
+                PorscheFARBs.Add("P4");
+                PorscheFARBs.Add("P5");
 
-                PorscheFABRs.Add("P6");
-                PorscheFABRs.Add("P7");
-                PorscheFABRs.Add("P8");
-                PorscheFABRs.Add("P9");
-                PorscheFABRs.Add("P10");
+                PorscheFARBs.Add("P6");
+                PorscheFARBs.Add("P7");
+                PorscheFARBs.Add("P8");
+                PorscheFARBs.Add("P9");
+                PorscheFARBs.Add("P10");
 
-                PorscheFABRs.Add("P11");
-                PorscheFABRs.Add("P12");
-                PorscheFABRs.Add("P13");
-                PorscheFABRs.Add("P14");
-                PorscheFABRs.Add("P15");
-                frontABRs.Add("Porsche", PorscheFABRs);
-                frontABRs.Add("Peugeot", PorscheFABRs);
-                frontABRs.Add("Toyota", PorscheFABRs);
-                frontABRs.Add("Glickenhaus", PorscheFABRs);
+                PorscheFARBs.Add("P11");
+                PorscheFARBs.Add("P12");
+                PorscheFARBs.Add("P13");
+                PorscheFARBs.Add("P14");
+                PorscheFARBs.Add("P15");
+                frontARBs.Add("Porsche", PorscheFARBs);
+                frontARBs.Add("Peugeot", PorscheFARBs);
+                frontARBs.Add("Toyota", PorscheFARBs);
+                frontARBs.Add("Glickenhaus", PorscheFARBs);
 
 
                 //Isotta TIPO6 2024
-                List<string> IsottaFABRs = new List<string>();
-                IsottaFABRs.Add("Detached");
-                IsottaFABRs.Add("P1");
-                IsottaFABRs.Add("P2");
-                IsottaFABRs.Add("P3");
-                IsottaFABRs.Add("P4");
-                IsottaFABRs.Add("P5");
-                IsottaFABRs.Add("P6");
-                IsottaFABRs.Add("P7");
-                frontABRs.Add("Isotta", IsottaFABRs);
+                List<string> IsottaFARBs = new List<string>();
+                IsottaFARBs.Add("Detached");
+                IsottaFARBs.Add("P1");
+                IsottaFARBs.Add("P2");
+                IsottaFARBs.Add("P3");
+                IsottaFARBs.Add("P4");
+                IsottaFARBs.Add("P5");
+                IsottaFARBs.Add("P6");
+                IsottaFARBs.Add("P7");
+                frontARBs.Add("Isotta", IsottaFARBs);
 
 
             }
@@ -1613,7 +1629,7 @@ namespace Redadeg.lmuDataPlugin
 
         private void initBackABRDict()
         {
-            rearABRs = new Dictionary<string, List<string>>();
+            rearARBs = new Dictionary<string, List<string>>();
             try
             {
                 //BMW 2024
@@ -1624,7 +1640,7 @@ namespace Redadeg.lmuDataPlugin
                 BMWRABRs.Add("P3");
                 BMWRABRs.Add("P4");
                 BMWRABRs.Add("P5");
-                rearABRs.Add("BMW", BMWRABRs);
+                rearARBs.Add("BMW", BMWRABRs);
 
 
                 //alpine 2024
@@ -1643,8 +1659,8 @@ namespace Redadeg.lmuDataPlugin
                 alipineRABRs.Add("P11");
                 alipineRABRs.Add("P12");
                 
-                rearABRs.Add("Aston", alipineRABRs);
-                rearABRs.Add("Alpine", alipineRABRs);
+                rearARBs.Add("Aston", alipineRABRs);
+                rearARBs.Add("Alpine", alipineRABRs);
             
 
                 //Lambo 2024
@@ -1669,7 +1685,7 @@ namespace Redadeg.lmuDataPlugin
                 lamboRABRs.Add("20.5-TK 60deg");
                 lamboRABRs.Add("20.5-TK 90deg");
 
-                rearABRs.Add("Lamborghini", lamboRABRs);
+                rearARBs.Add("Lamborghini", lamboRABRs);
              
 
                 //Cadillac 2024
@@ -1680,8 +1696,8 @@ namespace Redadeg.lmuDataPlugin
                 CadillacRABRs.Add("P3");
                 CadillacRABRs.Add("P4");
                 CadillacRABRs.Add("P5");
-                rearABRs.Add("Action", CadillacRABRs);
-                rearABRs.Add("Cadillac", CadillacRABRs);
+                rearARBs.Add("Action", CadillacRABRs);
+                rearARBs.Add("Cadillac", CadillacRABRs);
 
 
                 //Ferrary 2024
@@ -1717,8 +1733,8 @@ namespace Redadeg.lmuDataPlugin
                 FerraryRABRs.Add("E-P4");
                 FerraryRABRs.Add("E-P5");
 
-                rearABRs.Add("Ferrari", FerraryRABRs);
-                rearABRs.Add("AF", FerraryRABRs);
+                rearARBs.Add("Ferrari", FerraryRABRs);
+                rearARBs.Add("AF", FerraryRABRs);
               
                 //Porsche, Pegeout,Glickenhaus
                 List<string> PorscheRABRs = new List<string>();
@@ -1740,10 +1756,10 @@ namespace Redadeg.lmuDataPlugin
                 PorscheRABRs.Add("P13");
                 PorscheRABRs.Add("P14");
                 PorscheRABRs.Add("P15");
-                rearABRs.Add("Porsche", PorscheRABRs);
-                rearABRs.Add("Peugeot", PorscheRABRs);
-                rearABRs.Add("Toyota", PorscheRABRs);
-                rearABRs.Add("Glickenhaus", PorscheRABRs);
+                rearARBs.Add("Porsche", PorscheRABRs);
+                rearARBs.Add("Peugeot", PorscheRABRs);
+                rearARBs.Add("Toyota", PorscheRABRs);
+                rearARBs.Add("Glickenhaus", PorscheRABRs);
 
                 //Isotta TIPO6 2024
                 List<string> IsottaRABRs = new List<string>();
@@ -1755,7 +1771,7 @@ namespace Redadeg.lmuDataPlugin
                 IsottaRABRs.Add("P5");
                 IsottaRABRs.Add("P6");
                 IsottaRABRs.Add("P7");
-                rearABRs.Add("Isotta", IsottaRABRs);
+                rearARBs.Add("Isotta", IsottaRABRs);
             }
             catch { }
         }
