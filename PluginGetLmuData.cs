@@ -638,7 +638,7 @@ namespace Redadeg.lmuDataPlugin
                                     //{ LMURepairAndRefuelData.VM_REAR_ANTISWAY = rearABR["G" + LMURepairAndRefuelData.mChangedParamValue]; }
                                     //else
                                     //{ LMURepairAndRefuelData.VM_REAR_ANTISWAY = rearABR[LMURepairAndRefuelData.mChangedParamValue]; }
-                                        if (!LMURepairAndRefuelData.CarModel.StartsWith("Floyd") && !LMURepairAndRefuelData.CarModel.StartsWith("VLMDH") && LMURepairAndRefuelData.CarClass.Equals("Hyper"))
+                                        if (!LMURepairAndRefuelData.CarModel.StartsWith("Floyd") && !LMURepairAndRefuelData.CarModel.StartsWith("VLMDH") && !LMURepairAndRefuelData.CarModel.StartsWith("Vanwall") && LMURepairAndRefuelData.CarClass.Equals("Hyper"))
                                         {
                                          String CarID = LMURepairAndRefuelData.CarModel.Split(' ')[0];
                                         try
