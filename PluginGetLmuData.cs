@@ -638,7 +638,7 @@ namespace Redadeg.lmuDataPlugin
                                     //{ LMURepairAndRefuelData.VM_REAR_ANTISWAY = rearABR["G" + LMURepairAndRefuelData.mChangedParamValue]; }
                                     //else
                                     //{ LMURepairAndRefuelData.VM_REAR_ANTISWAY = rearABR[LMURepairAndRefuelData.mChangedParamValue]; }
-                                        if (!LMURepairAndRefuelData.CarModel.Equals("Floyd Vanwall Racing Team") && LMURepairAndRefuelData.CarClass.Equals("Hyper"))
+                                        if (!LMURepairAndRefuelData.CarModel.StartsWith("Floyd") && !LMURepairAndRefuelData.CarModel.StartsWith("VLMDH") && LMURepairAndRefuelData.CarClass.Equals("Hyper"))
                                         {
                                          String CarID = LMURepairAndRefuelData.CarModel.Split(' ')[0];
                                         try
@@ -1608,6 +1608,7 @@ namespace Redadeg.lmuDataPlugin
                 PorscheFARBs.Add("P15");
                 frontARBs.Add("Porsche", PorscheFARBs);
                 frontARBs.Add("Peugeot", PorscheFARBs);
+                frontARBs.Add("9x8", PorscheFARBs);
                 frontARBs.Add("Toyota", PorscheFARBs);
                 frontARBs.Add("Glickenhaus", PorscheFARBs);
 
@@ -1762,6 +1763,7 @@ namespace Redadeg.lmuDataPlugin
                 PorscheRABRs.Add("P15");
                 rearARBs.Add("Porsche", PorscheRABRs);
                 rearARBs.Add("Peugeot", PorscheRABRs);
+                rearARBs.Add("9x8", PorscheRABRs);
                 rearARBs.Add("Toyota", PorscheRABRs);
                 rearARBs.Add("Glickenhaus", PorscheRABRs);
 
