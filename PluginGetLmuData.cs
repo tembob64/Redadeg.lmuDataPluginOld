@@ -1486,7 +1486,7 @@ namespace Redadeg.lmuDataPlugin
                 BMWFARBs.Add("P4");
                 BMWFARBs.Add("P5");
                 frontARBs.Add("BMW", BMWFARBs);
-            
+                frontARBs.Add("BMWMH", BMWFARBs);
 
                 //alpine 2024
                 List<string> alipineFARBs = new List<string>();
@@ -1507,6 +1507,7 @@ namespace Redadeg.lmuDataPlugin
                 alipineFARBs.Add("P14");
 
                 frontARBs.Add("Aston", alipineFARBs);
+                frontARBs.Add("BMWMH", alipineFARBs);
                 frontARBs.Add("Alpine", alipineFARBs);
               
 
@@ -1642,6 +1643,7 @@ namespace Redadeg.lmuDataPlugin
                 BMWRABRs.Add("P4");
                 BMWRABRs.Add("P5");
                 rearARBs.Add("BMW", BMWRABRs);
+                rearARBs.Add("BMWMH", BMWRABRs); 
 
 
                 //alpine 2024
@@ -1661,6 +1663,7 @@ namespace Redadeg.lmuDataPlugin
                 alipineRABRs.Add("P12");
                 
                 rearARBs.Add("Aston", alipineRABRs);
+                rearARBs.Add("AM", alipineRABRs);
                 rearARBs.Add("Alpine", alipineRABRs);
             
 
@@ -1736,7 +1739,7 @@ namespace Redadeg.lmuDataPlugin
 
                 rearARBs.Add("Ferrari", FerraryRABRs);
                 rearARBs.Add("AF", FerraryRABRs);
-              
+                rearARBs.Add("499P", FerraryRABRs);
                 //Porsche, Pegeout,Glickenhaus
                 List<string> PorscheRABRs = new List<string>();
                 PorscheRABRs.Add("Detached");
