@@ -1582,7 +1582,8 @@ namespace Redadeg.lmuDataPlugin
                 FerraryFARBs.Add("E-P5");
                 frontARBs.Add("Ferrari", FerraryFARBs);
                 frontARBs.Add("AF", FerraryFARBs);
-        
+                frontARBs.Add("499P", FerraryFARBs);
+
 
                 //Porsche, Pegeout,Glickenhaus
                 List<string> PorscheFARBs = new List<string>();
