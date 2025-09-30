@@ -601,17 +601,19 @@ namespace Redadeg.lmuDataPlugin
                                             }
                                             else
                                             {
-                                                if (!LMURepairAndRefuelData.CarModel.Equals("Floyd Vanwall Racing Team") && LMURepairAndRefuelData.CarClass.Equals("Hyper"))
-                                                {
-                                                    String CarID = LMURepairAndRefuelData.CarModel.Split(' ')[0];
+                                        if (!LMURepairAndRefuelData.CarModel.StartsWith("Floyd") && !LMURepairAndRefuelData.CarModel.StartsWith("VLMDH") && !LMURepairAndRefuelData.CarModel.StartsWith("Vanwall") && LMURepairAndRefuelData.CarClass.Equals("Hyper"))
+                                        {
+                                                    String CarID = LMURepairAndRefuelData.CarModel.Split(' ')[0].Trim();
                                             try
-                                            { 
-                                                    LMURepairAndRefuelData.VM_FRONT_ANTISWAY = frontARBs[CarID][LMURepairAndRefuelData.VM_FRONT_ANTISWAY_INT];
+                                            {
+                                                initFrontABRDict();
+                                                initBackABRDict();
+                                                LMURepairAndRefuelData.VM_FRONT_ANTISWAY = frontARBs[CarID][LMURepairAndRefuelData.VM_FRONT_ANTISWAY_INT];
                                                     LMURepairAndRefuelData.VM_REAR_ANTISWAY = rearARBs[CarID][LMURepairAndRefuelData.VM_REAR_ANTISWAY_INT];
                                             }
                                             catch (Exception ex)
                                             {
-                                                Logging.Current.Error("ARBs: " + ex.Message);
+                                                Logging.Current.Error("ARBs: " + CarID + " " + frontARBs.Count() + " " + ex.Message);
                                             }
 
                                         }
@@ -640,9 +642,11 @@ namespace Redadeg.lmuDataPlugin
                                     //{ LMURepairAndRefuelData.VM_REAR_ANTISWAY = rearABR[LMURepairAndRefuelData.mChangedParamValue]; }
                                         if (!LMURepairAndRefuelData.CarModel.StartsWith("Floyd") && !LMURepairAndRefuelData.CarModel.StartsWith("VLMDH") && !LMURepairAndRefuelData.CarModel.StartsWith("Vanwall") && LMURepairAndRefuelData.CarClass.Equals("Hyper"))
                                         {
-                                         String CarID = LMURepairAndRefuelData.CarModel.Split(' ')[0];
+                                         String CarID = LMURepairAndRefuelData.CarModel.Split(' ')[0].Trim();
                                         try
                                         {
+                                            initFrontABRDict();
+                                            initBackABRDict();
                                             LMURepairAndRefuelData.VM_FRONT_ANTISWAY = frontARBs[CarID][LMURepairAndRefuelData.VM_FRONT_ANTISWAY_INT];
                                             LMURepairAndRefuelData.VM_REAR_ANTISWAY = rearARBs[CarID][LMURepairAndRefuelData.VM_REAR_ANTISWAY_INT];
                                         }
@@ -1507,7 +1511,7 @@ namespace Redadeg.lmuDataPlugin
                 alipineFARBs.Add("P14");
 
                 frontARBs.Add("Aston", alipineFARBs);
-                frontARBs.Add("BMWMH", alipineFARBs);
+                frontARBs.Add("AM", alipineFARBs);
                 frontARBs.Add("Alpine", alipineFARBs);
               
 
