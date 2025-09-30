@@ -606,8 +606,7 @@ namespace Redadeg.lmuDataPlugin
                                                     String CarID = LMURepairAndRefuelData.CarModel.Split(' ')[0].Trim();
                                             try
                                             {
-                                                initFrontABRDict();
-                                                initBackABRDict();
+                        
                                                 LMURepairAndRefuelData.VM_FRONT_ANTISWAY = frontARBs[CarID][LMURepairAndRefuelData.VM_FRONT_ANTISWAY_INT];
                                                     LMURepairAndRefuelData.VM_REAR_ANTISWAY = rearARBs[CarID][LMURepairAndRefuelData.VM_REAR_ANTISWAY_INT];
                                             }
@@ -645,8 +644,7 @@ namespace Redadeg.lmuDataPlugin
                                          String CarID = LMURepairAndRefuelData.CarModel.Split(' ')[0].Trim();
                                         try
                                         {
-                                            initFrontABRDict();
-                                            initBackABRDict();
+                
                                             LMURepairAndRefuelData.VM_FRONT_ANTISWAY = frontARBs[CarID][LMURepairAndRefuelData.VM_FRONT_ANTISWAY_INT];
                                             LMURepairAndRefuelData.VM_REAR_ANTISWAY = rearARBs[CarID][LMURepairAndRefuelData.VM_REAR_ANTISWAY_INT];
                                         }
