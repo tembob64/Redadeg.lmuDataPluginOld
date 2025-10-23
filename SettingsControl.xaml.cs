@@ -92,7 +92,16 @@ namespace Redadeg.lmuDataPlugin
                 ButtonBindSettings.AntiFlickPitMenuTimeout = JSONSettingsdata["AntiFlickPitMenuTimeout"] != null ? (int)JSONSettingsdata["AntiFlickPitMenuTimeout"] : 10;
 
             }
-            catch { }
+            catch {
+                ButtonBindSettings.WriteStandingsJSON =  false;
+                ButtonBindSettings.WriteStandingsJSONToParameter = false;
+                ButtonBindSettings.Clock_Format24 =  false;
+                ButtonBindSettings.RealTimeClock =  false;
+                ButtonBindSettings.GetMemoryDataThreadTimeout =  50;
+                ButtonBindSettings.DataUpdateThreadTimeout =  100;
+                ButtonBindSettings.AntiFlickPitMenuTimeout =  10;
+                SaveSetting();
+            }
             WriteStandingsJSON.IsChecked = ButtonBindSettings.WriteStandingsJSON;
             WriteStandingsJSONToParameter.IsChecked = ButtonBindSettings.WriteStandingsJSONToParameter;
             clock_format24.IsChecked = ButtonBindSettings.Clock_Format24;
