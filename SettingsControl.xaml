@@ -50,6 +50,13 @@
                     <Custom:NumericUpDown x:Name="AntiFlickPitMenuTimeout" ValueChanged="AntiFlickPitMenuTimeout_ValueChanged"  Margin="0,2,0,2" Width="180" Grid.Row="3" Grid.Column="1" ToolTip=""  Minimum="1" Maximum="2000"/>
 
 
+                    <TextBlock HorizontalAlignment="Left" Height="15" Margin="0,7,0,8" TextWrapping="Wrap" Text="Write Standings JSON" Width="175" Grid.Row="4"/>
+                    <CheckBox x:Name="WriteStandingsJSON" HorizontalAlignment="Center" Height="15" Margin="0,2,0,2"  Width="180" Grid.Row="4" Grid.Column="1" ToolTip="Write Standings JSON" Checked="WriteStandingsJSON_Checked" Unchecked="WriteStandingsJSON_unChecked"/>
+
+                    <TextBlock HorizontalAlignment="Left" Height="15" Margin="0,7,0,8" TextWrapping="Wrap" Text="Write Standings JSON to parameter lmuDataPlugin.Redadeg.lmu.Standings.StandingsDataJson" Width="175" Grid.Row="5"/>
+                    <CheckBox x:Name="WriteStandingsJSONToParameter" HorizontalAlignment="Center" Height="15" Margin="0,2,0,2"  Width="180" Grid.Row="5" Grid.Column="1" ToolTip="Write Standings JSON to parameter lmuDataPlugin.Redadeg.lmu.Standings.StandingsDataJson" Checked="WriteStandingsJSONToParameter_Checked" Unchecked="WriteStandingsJSONToParameter_unChecked"/>
+
+
                     <TextBlock HorizontalAlignment="Left" Height="15" Margin="0,2,0,2" TextWrapping="Wrap" Text="After bind next key Refresh" Width="153" Grid.Row="7" ToolTip="Bind PIT STOP EVERLAY DECREMET KEY"/>
                     <Button x:Name="refresh_button" HorizontalAlignment="Center" Height="15" Margin="0,2,0,2"  Width="180" Grid.Row="7" Grid.Column="1" ToolTip="Bind PIT STOP EVERLAY UP KEY" Click="refresh_button_Click" >
                         <TextBlock x:Name="refresh_button_text" Text="Refresh" TextAlignment="Center" HorizontalAlignment="Center" Height="24"   Width="180" Grid.Row="7" Grid.Column="1" />

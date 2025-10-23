@@ -19,6 +19,7 @@ using System.Net.Http;
 using System.Text;  //For File Encoding
 using System.Threading;
 using System.Threading.Tasks;
+using WoteverCommon;
 //using System.Windows.Shapes;
 //using WoteverCommon.Extensions;
 //using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
@@ -36,6 +37,7 @@ namespace Redadeg.lmuDataPlugin
     {
 
         private const string PLUGIN_CONFIG_FILENAME = "Redadeg.lmuDataPlugin.json";
+        private const string PLUGIN_DATA_FILENAME = "Redadeg.lmuDataPlugin.Standings.json";
 
         private Thread lmu_extendedThread;
         private Thread lmuCalculateConsumptionsThread;
@@ -307,6 +309,7 @@ namespace Redadeg.lmuDataPlugin
                             pluginManager.SetPropertyValue("Redadeg.lmu.Standings.penalties", this.GetType(), LMURepairAndRefuelData.penalties);
                             pluginManager.SetPropertyValue("Redadeg.lmu.Standings.pitState", this.GetType(), LMURepairAndRefuelData.pitState);
                             pluginManager.SetPropertyValue("Redadeg.lmu.Standings.pitstops", this.GetType(), LMURepairAndRefuelData.pitstops);
+                            pluginManager.SetPropertyValue("Redadeg.lmu.Standings.StandingsDataJson", this.GetType(), LMURepairAndRefuelData.StandingsDataJson);
 
                             pluginManager.SetPropertyValue("Redadeg.lmu.ExtendedFromLmu.EnergyLastLap", this.GetType(), LMURepairAndRefuelData.extended_EnergyLastLap);
                             pluginManager.SetPropertyValue("Redadeg.lmu.ExtendedFromLmu.FuelLastLap", this.GetType(), LMURepairAndRefuelData.extended_FuelLastLap);
@@ -715,12 +718,19 @@ namespace Redadeg.lmuDataPlugin
                            
                           
 
-
+                        
                             
                             List<StandingData> StandingsData = DeserialiseStandingsData(await FetchStandingsJSONdata());
-                        
 
-                    foreach (StandingData Standing in StandingsData)
+                       if (ButtonBindSettings.WriteStandingsJSONToParameter) LMURepairAndRefuelData.StandingsDataJson = StandingsData.ToJson();
+
+
+                        if (ButtonBindSettings.WriteStandingsJSON)
+                        { 
+                            File.WriteAllText(LMURepairAndRefuelData.DataPath, StandingsData.ToJson());
+                        }
+
+                        foreach (StandingData Standing in StandingsData)
                         {
                            if (Standing.position == LMURepairAndRefuelData.Position)
                             {
@@ -1429,12 +1439,15 @@ namespace Redadeg.lmuDataPlugin
             //FuelConsuptions = new List<float>();
             // set path/filename for settings file
             LMURepairAndRefuelData.path = PluginManager.GetCommonStoragePath(PLUGIN_CONFIG_FILENAME);
+            LMURepairAndRefuelData.DataPath = PluginManager.GetCommonStoragePath(PLUGIN_DATA_FILENAME);
             //string path_data = PluginManager.GetCommonStoragePath("Redadeg.lmuDataPlugin.data.json");
             //List<PitStopDataIndexesClass> PitStopDataIndexes = new List<PitStopDataIndexesClass>();
             // try to read settings file
             try
             {
                 JObject JSONSettingsdata = JObject.Parse(File.ReadAllText(LMURepairAndRefuelData.path));
+                ButtonBindSettings.WriteStandingsJSON = JSONSettingsdata["WriteStandingsJSON"] != null ? (bool)JSONSettingsdata["WriteStandingsJSON"] : false;
+                ButtonBindSettings.WriteStandingsJSONToParameter = JSONSettingsdata["WriteStandingsJSONToParameter"] != null ? (bool)JSONSettingsdata["WriteStandingsJSONToParameter"] : false;
                 ButtonBindSettings.Clock_Format24 = JSONSettingsdata["Clock_Format24"] != null ? (bool)JSONSettingsdata["Clock_Format24"] : false;
                 ButtonBindSettings.RealTimeClock = JSONSettingsdata["RealTimeClock"] != null ? (bool)JSONSettingsdata["RealTimeClock"] : false;
                 ButtonBindSettings.GetMemoryDataThreadTimeout = JSONSettingsdata["GetMemoryDataThreadTimeout"] != null ? (int)JSONSettingsdata["GetMemoryDataThreadTimeout"] : 50;
@@ -1574,7 +1587,8 @@ namespace Redadeg.lmuDataPlugin
             pluginManager.AddProperty("Redadeg.lmu.Standings.penalties", this.GetType(), 0);
             pluginManager.AddProperty("Redadeg.lmu.Standings.pitState", this.GetType(), 0);
             pluginManager.AddProperty("Redadeg.lmu.Standings.pitstops", this.GetType(), 0);
-
+            pluginManager.AddProperty("Redadeg.lmu.Standings.StandingsDataJson", this.GetType(), "");
+            
             pluginManager.AddProperty("Redadeg.lmu.ExtendedFromLmu.EnergyLastLap", this.GetType(), 0);
             pluginManager.AddProperty("Redadeg.lmu.ExtendedFromLmu.FuelLastLap", this.GetType(), 0);
             pluginManager.AddProperty("Redadeg.lmu.ExtendedFromLmu.MaxEnergyValue", this.GetType(), 0);
@@ -1928,6 +1942,7 @@ namespace Redadeg.lmuDataPlugin
         public static string pitState { get; set; }
         public static int pitstops { get; set; }
         public static int Position { get; set; }
+        public static string StandingsDataJson { get; set; }
 
 
         //public static string PIT_RECOM_FL_TIRE { get; set; }
@@ -1993,7 +2008,8 @@ namespace Redadeg.lmuDataPlugin
             public static double FuelRatio { get; set; }
             public static double pitStopLength { get; set; }
             public static string path { get; set; }
-            public static double timeOfDay { get; set; }
+        public static string DataPath { get; set; }
+        public static double timeOfDay { get; set; }
             public static int rainChance { get; set; }
 
             public static string VM_ANTILOCKBRAKESYSTEMMAP { get; set; }

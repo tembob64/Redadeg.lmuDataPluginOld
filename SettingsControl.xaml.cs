@@ -82,6 +82,9 @@ namespace Redadeg.lmuDataPlugin
             try
             {
                 JObject JSONSettingsdata = JObject.Parse(File.ReadAllText(LMURepairAndRefuelData.path));
+                
+                ButtonBindSettings.WriteStandingsJSON = JSONSettingsdata["WriteStandingsJSON"] != null ? (bool)JSONSettingsdata["WriteStandingsJSON"] : false;
+                ButtonBindSettings.WriteStandingsJSONToParameter = JSONSettingsdata["WriteStandingsJSONToParameter"] != null ? (bool)JSONSettingsdata["WriteStandingsJSONToParameter"] : false;
                 ButtonBindSettings.Clock_Format24 = JSONSettingsdata["Clock_Format24"] != null ? (bool)JSONSettingsdata["Clock_Format24"] : false;
                 ButtonBindSettings.RealTimeClock = JSONSettingsdata["RealTimeClock"] != null ? (bool)JSONSettingsdata["RealTimeClock"] : false;
                 ButtonBindSettings.GetMemoryDataThreadTimeout = JSONSettingsdata["GetMemoryDataThreadTimeout"] != null ? (int)JSONSettingsdata["GetMemoryDataThreadTimeout"] : 50;
@@ -90,6 +93,8 @@ namespace Redadeg.lmuDataPlugin
 
             }
             catch { }
+            WriteStandingsJSON.IsChecked = ButtonBindSettings.WriteStandingsJSON;
+            WriteStandingsJSONToParameter.IsChecked = ButtonBindSettings.WriteStandingsJSONToParameter;
             clock_format24.IsChecked = ButtonBindSettings.Clock_Format24;
             RealTimeClock.IsChecked = ButtonBindSettings.RealTimeClock;
             GetMemoryDataThreadTimeout.Value = ButtonBindSettings.GetMemoryDataThreadTimeout;
@@ -106,6 +111,8 @@ namespace Redadeg.lmuDataPlugin
             try
             {
                 JObject JSONSettingsdata = JObject.Parse(File.ReadAllText(LMURepairAndRefuelData.path));
+                ButtonBindSettings.WriteStandingsJSON = JSONSettingsdata["WriteStandingsJSON"] != null ? (bool)JSONSettingsdata["WriteStandingsJSON"] : false;
+                ButtonBindSettings.WriteStandingsJSONToParameter = JSONSettingsdata["WriteStandingsJSONToParameter"] != null ? (bool)JSONSettingsdata["WriteStandingsJSONToParameter"] : false;
                 ButtonBindSettings.Clock_Format24 = JSONSettingsdata["Clock_Format24"] != null ? (bool)JSONSettingsdata["Clock_Format24"] : false;
                 ButtonBindSettings.RealTimeClock = JSONSettingsdata["RealTimeClock"] != null ? (bool)JSONSettingsdata["RealTimeClock"] : false;
                 ButtonBindSettings.GetMemoryDataThreadTimeout = JSONSettingsdata["GetMemoryDataThreadTimeout"] != null ? (int)JSONSettingsdata["GetMemoryDataThreadTimeout"] : 50;
@@ -115,8 +122,18 @@ namespace Redadeg.lmuDataPlugin
             catch { }
             base.Dispatcher.InvokeAsync(delegate
             {
-                
-               
+
+                lock (WriteStandingsJSON)
+                {
+                    WriteStandingsJSON.IsChecked = ButtonBindSettings.WriteStandingsJSON;
+
+                }
+                lock (WriteStandingsJSONToParameter)
+                {
+                    WriteStandingsJSONToParameter.IsChecked = ButtonBindSettings.WriteStandingsJSONToParameter;
+
+                }
+
                 lock (clock_format24)
                 {
                     clock_format24.IsChecked = ButtonBindSettings.Clock_Format24;
@@ -180,7 +197,8 @@ namespace Redadeg.lmuDataPlugin
 
         private void refresh_button_Click(object sender, RoutedEventArgs e)
         {
-
+            WriteStandingsJSON.IsChecked = ButtonBindSettings.WriteStandingsJSON;
+            WriteStandingsJSONToParameter.IsChecked = ButtonBindSettings.WriteStandingsJSONToParameter;
             clock_format24.IsChecked = ButtonBindSettings.Clock_Format24;
             RealTimeClock.IsChecked = ButtonBindSettings.RealTimeClock;
             GetMemoryDataThreadTimeout.Value = ButtonBindSettings.GetMemoryDataThreadTimeout;
@@ -196,7 +214,9 @@ namespace Redadeg.lmuDataPlugin
                    new JProperty("RealTimeClock", ButtonBindSettings.RealTimeClock),
                    new JProperty("GetMemoryDataThreadTimeout", ButtonBindSettings.GetMemoryDataThreadTimeout),
                    new JProperty("DataUpdateThreadTimeout", ButtonBindSettings.DataUpdateThreadTimeout),
-                   new JProperty("AntiFlickPitMenuTimeout", ButtonBindSettings.AntiFlickPitMenuTimeout)); 
+                   new JProperty("AntiFlickPitMenuTimeout", ButtonBindSettings.AntiFlickPitMenuTimeout),
+                   new JProperty("WriteStandingsJSON", ButtonBindSettings.WriteStandingsJSON),
+                   new JProperty("WriteStandingsJSONToParameter", ButtonBindSettings.WriteStandingsJSON));
             //string settings_path = AccData.path;
             try
             {
@@ -213,8 +233,8 @@ namespace Redadeg.lmuDataPlugin
 
             }
         }
-       
-      
+
+
 
         private void clock_format24_Checked(object sender, RoutedEventArgs e)
         {
@@ -225,6 +245,33 @@ namespace Redadeg.lmuDataPlugin
         private void clock_format24_unChecked(object sender, RoutedEventArgs e)
         {
             ButtonBindSettings.Clock_Format24 = false;
+            message_text.Text = "";
+            SaveSetting();
+        }
+
+
+        private void WriteStandingsJSONToParameter_Checked(object sender, RoutedEventArgs e)
+        {
+            ButtonBindSettings.WriteStandingsJSONToParameter = true;
+            message_text.Text = "";
+            SaveSetting();
+        }
+        private void WriteStandingsJSONToParameter_unChecked(object sender, RoutedEventArgs e)
+        {
+            ButtonBindSettings.WriteStandingsJSONToParameter = false;
+            message_text.Text = "";
+            SaveSetting();
+        }
+
+        private void WriteStandingsJSON_Checked(object sender, RoutedEventArgs e)
+        {
+            ButtonBindSettings.WriteStandingsJSON = true;
+            message_text.Text = "";
+            SaveSetting();
+        }
+        private void WriteStandingsJSON_unChecked(object sender, RoutedEventArgs e)
+        {
+            ButtonBindSettings.WriteStandingsJSON = false;
             message_text.Text = "";
             SaveSetting();
         }
@@ -283,6 +330,8 @@ namespace Redadeg.lmuDataPlugin
     {
         public static bool RealTimeClock { get; set; }
         public static bool Clock_Format24 { get; set; }
+        public static bool WriteStandingsJSON { get; set; }
+        public static bool WriteStandingsJSONToParameter { get; set; }
         public static int DataUpdateThreadTimeout { get; set; }
         public static int GetMemoryDataThreadTimeout { get; set; }
         public static int AntiFlickPitMenuTimeout{ get; set; }
