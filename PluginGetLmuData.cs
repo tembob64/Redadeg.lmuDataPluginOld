@@ -1599,39 +1599,7 @@ namespace Redadeg.lmuDataPlugin
                 ButtonBindSettings.DataUpdateThreadTimeout = JSONSettingsdata["DataUpdateThreadTimeout"] != null ? (int)JSONSettingsdata["DataUpdateThreadTimeout"] : 100;
                 ButtonBindSettings.AntiFlickPitMenuTimeout = JSONSettingsdata["AntiFlickPitMenuTimeout"] != null ? (int)JSONSettingsdata["AntiFlickPitMenuTimeout"] : 10;
             }
-            catch {
-                ButtonBindSettings.WriteStandingsJSON = false;
-                ButtonBindSettings.WriteStandingsJSONToParameter = false;
-                ButtonBindSettings.Clock_Format24 = false;
-                ButtonBindSettings.RealTimeClock = false;
-                ButtonBindSettings.GetMemoryDataThreadTimeout = 50;
-                ButtonBindSettings.DataUpdateThreadTimeout = 100;
-                ButtonBindSettings.AntiFlickPitMenuTimeout = 10;
-                JObject JSONdata = new JObject(
-                 new JProperty("Clock_Format24", ButtonBindSettings.Clock_Format24),
-                 new JProperty("RealTimeClock", ButtonBindSettings.RealTimeClock),
-                 new JProperty("GetMemoryDataThreadTimeout", ButtonBindSettings.GetMemoryDataThreadTimeout),
-                 new JProperty("DataUpdateThreadTimeout", ButtonBindSettings.DataUpdateThreadTimeout),
-                 new JProperty("AntiFlickPitMenuTimeout", ButtonBindSettings.AntiFlickPitMenuTimeout),
-                 new JProperty("WriteStandingsJSON", ButtonBindSettings.WriteStandingsJSON),
-                 new JProperty("WriteStandingsJSONToParameter", ButtonBindSettings.WriteStandingsJSON));
-                //string settings_path = AccData.path;
-                try
-                {
-                    // create/write settings file
-                    File.WriteAllText(LMURepairAndRefuelData.path, JSONdata.ToString());
-                    Logging.Current.Info("Plugin georace.lmuDataPlugin - Settings file saved to : " + System.Environment.CurrentDirectory + "\\" + LMURepairAndRefuelData.path);
-                }
-                catch
-                {
-                    //A MessageBox creates graphical glitches after closing it. Search another way, maybe using the Standard Log in SimHub\Logs
-                    //MessageBox.Show("Cannot create or write the following file: \n" + System.Environment.CurrentDirectory + "\\" + AccData.path, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
-                    Logging.Current.Error("Plugin georace.lmuDataPlugin - Cannot create or write settings file: " + System.Environment.CurrentDirectory + "\\" + LMURepairAndRefuelData.path);
-
-
-                }
-                ;
-            }
+            catch { }
 
 
 
