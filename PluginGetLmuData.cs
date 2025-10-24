@@ -1,4 +1,4 @@
-using GameReaderCommon;
+﻿using GameReaderCommon;
 using MahApps.Metro.Controls;
 using Newtonsoft.Json;
 
@@ -16,6 +16,7 @@ using System.Collections.Generic;
 using System.IO;    // Need for read/write JSON settings file
 using System.Linq;
 using System.Net.Http;
+using System.Net.WebSockets;
 using System.Text;  //For File Encoding
 using System.Threading;
 using System.Threading.Tasks;
@@ -42,12 +43,14 @@ namespace Redadeg.lmuDataPlugin
         private Thread lmu_extendedThread;
         private Thread lmuCalculateConsumptionsThread;
         private Thread lmuGetJSonDataThread;
+        private Thread lmuLiveStandingsReadThread;
 
         private SettingsControl settingsControlwpf;
 
         private CancellationTokenSource cts = new CancellationTokenSource();
         private CancellationTokenSource ctsGetJSonDataThread = new CancellationTokenSource();
         private CancellationTokenSource ctsCalculateConsumptionsThread = new CancellationTokenSource();
+        private CancellationTokenSource ctsLiveStandingsReadThread = new CancellationTokenSource();
 
         public bool IsEnded { get; private set; }
         public bool GetJSonDataIsEnded { get; private set; }
@@ -109,7 +112,9 @@ namespace Redadeg.lmuDataPlugin
         MappedBuffer<LMU_Extended> extendedBuffer = new MappedBuffer<LMU_Extended>(LMU_Constants.MM_EXTENDED_FILE_NAME, false /*partial*/, true /*skipUnchanged*/);
         MappedBuffer<rF2Scoring> scoringBuffer = new MappedBuffer<rF2Scoring>(LMU_Constants.MM_SCORING_FILE_NAME, true /*partial*/, true /*skipUnchanged*/);
         // MappedBuffer<rF2Rules> rulesBuffer = new MappedBuffer<rF2Rules>(LMU_Constants.MM_RULES_FILE_NAME, true /*partial*/, true /*skipUnchanged*/);
-
+        private ClientWebSocket _ws;
+        private CancellationTokenSource _ws_cts;
+        private bool ws_RequestSended = false;
         LMU_Extended lmu_extended;
         //rF2Scoring scoring;
         //rF2Rules rules;
@@ -302,11 +307,11 @@ namespace Redadeg.lmuDataPlugin
                             pluginManager.SetPropertyValue("Redadeg.lmu.Standings.bestSectorTime2", this.GetType(), LMURepairAndRefuelData.bestSectorTime2);
                             pluginManager.SetPropertyValue("Redadeg.lmu.Standings.currentSectorTime1", this.GetType(), LMURepairAndRefuelData.currentSectorTime1);
                             pluginManager.SetPropertyValue("Redadeg.lmu.Standings.currentSectorTime2", this.GetType(), LMURepairAndRefuelData.currentSectorTime2);
-                            pluginManager.SetPropertyValue("Redadeg.lmu.Standings.estimatedLapTime", this.GetType(), LMURepairAndRefuelData.estimatedLapTime);
+                            pluginManager.SetPropertyValue("Redadeg.lmu.Standings.SG", this.GetType(), LMURepairAndRefuelData.SG);
                             pluginManager.SetPropertyValue("Redadeg.lmu.Standings.timeBehindLeader", this.GetType(), LMURepairAndRefuelData.timeBehindLeader);
                             pluginManager.SetPropertyValue("Redadeg.lmu.Standings.timeBehindNext", this.GetType(), LMURepairAndRefuelData.timeBehindNext);
                             pluginManager.SetPropertyValue("Redadeg.lmu.Standings.lapsCompleted", this.GetType(), LMURepairAndRefuelData.lapsCompleted);
-                            pluginManager.SetPropertyValue("Redadeg.lmu.Standings.penalties", this.GetType(), LMURepairAndRefuelData.penalties);
+                            pluginManager.SetPropertyValue("Redadeg.lmu.Standings.DT", this.GetType(), LMURepairAndRefuelData.DT);
                             pluginManager.SetPropertyValue("Redadeg.lmu.Standings.pitState", this.GetType(), LMURepairAndRefuelData.pitState);
                             pluginManager.SetPropertyValue("Redadeg.lmu.Standings.pitstops", this.GetType(), LMURepairAndRefuelData.pitstops);
                             pluginManager.SetPropertyValue("Redadeg.lmu.Standings.StandingsDataJson", this.GetType(), LMURepairAndRefuelData.StandingsDataJson);
@@ -720,42 +725,44 @@ namespace Redadeg.lmuDataPlugin
 
                         
                             
-                            List<StandingData> StandingsData = DeserialiseStandingsData(await FetchStandingsJSONdata());
+                       //     List<StandingData> StandingsData = DeserialiseStandingsData(await FetchStandingsJSONdata());
 
-                       if (ButtonBindSettings.WriteStandingsJSONToParameter) LMURepairAndRefuelData.StandingsDataJson = StandingsData.ToJson();
+                       //if (ButtonBindSettings.WriteStandingsJSONToParameter) LMURepairAndRefuelData.StandingsDataJson = StandingsData.ToJson();
 
 
-                        if (ButtonBindSettings.WriteStandingsJSON)
-                        { 
-                            File.WriteAllText(LMURepairAndRefuelData.DataPath, StandingsData.ToJson());
-                        }
+                       // if (ButtonBindSettings.WriteStandingsJSON)
+                       // { 
+                       //     File.WriteAllText(LMURepairAndRefuelData.DataPath, StandingsData.ToJson());
+                       // }
 
-                        foreach (StandingData Standing in StandingsData)
-                        {
-                           if (Standing.position == LMURepairAndRefuelData.Position)
-                            {
-                               LMURepairAndRefuelData.lastLapTime = Standing.lastLapTime;
-                                LMURepairAndRefuelData.lastSectorTime1 =Standing.lastSectorTime1;
-                                LMURepairAndRefuelData.lastSectorTime2 =Standing.lastSectorTime2;
-                                LMURepairAndRefuelData.bestLapSectorTime1 =Standing.bestLapSectorTime1;
-                                LMURepairAndRefuelData.bestLapSectorTime2 =Standing.bestLapSectorTime2;
-                                LMURepairAndRefuelData.bestLapTime = Standing.bestLapTime;
-                                LMURepairAndRefuelData.bestSectorTime1 =Standing.bestSectorTime1;
-                                LMURepairAndRefuelData.bestSectorTime2 =Standing.bestSectorTime2;
-                                LMURepairAndRefuelData.currentSectorTime1 =Standing.currentSectorTime1;
-                                LMURepairAndRefuelData.currentSectorTime2 =Standing.currentSectorTime2;
-                                LMURepairAndRefuelData.estimatedLapTime =Standing.estimatedLapTime;
-                                LMURepairAndRefuelData.timeBehindLeader =Standing.timeBehindLeader;
-                                LMURepairAndRefuelData.timeBehindNext =Standing.timeBehindNext;
-                                LMURepairAndRefuelData.lapsCompleted = Standing.lapsCompleted;
-                                LMURepairAndRefuelData.penalties = Standing.penalties;
-                                LMURepairAndRefuelData.pitState = Standing.pitState;
-                                LMURepairAndRefuelData.pitstops = Standing.pitstops;
+                       // foreach (StandingData Standing in StandingsData)
+                       // {
+                       //    if (Standing.position == LMURepairAndRefuelData.Position)
+                       //     {
+                       //        LMURepairAndRefuelData.lastLapTime = Standing.lastLapTime;
+                       //         LMURepairAndRefuelData.lastSectorTime1 =Standing.lastSectorTime1;
+                       //         LMURepairAndRefuelData.lastSectorTime2 =Standing.lastSectorTime2;
+                       //         LMURepairAndRefuelData.bestLapSectorTime1 =Standing.bestLapSectorTime1;
+                       //         LMURepairAndRefuelData.bestLapSectorTime2 =Standing.bestLapSectorTime2;
+                       //         LMURepairAndRefuelData.bestLapTime = Standing.bestLapTime;
+                       //         LMURepairAndRefuelData.bestSectorTime1 =Standing.bestSectorTime1;
+                       //         LMURepairAndRefuelData.bestSectorTime2 =Standing.bestSectorTime2;
+                       //         LMURepairAndRefuelData.currentSectorTime1 =Standing.currentSectorTime1;
+                       //         LMURepairAndRefuelData.currentSectorTime2 =Standing.currentSectorTime2;
+                       //         LMURepairAndRefuelData.estimatedLapTime =Standing.estimatedLapTime;
+                       //         LMURepairAndRefuelData.timeBehindLeader =Standing.timeBehindLeader;
+                       //         LMURepairAndRefuelData.timeBehindNext =Standing.timeBehindNext;
+                       //         LMURepairAndRefuelData.lapsCompleted = Standing.lapsCompleted;
+                       //         LMURepairAndRefuelData.penalties = Standing.penalties;
+                       //         LMURepairAndRefuelData.pitState = Standing.pitState;
+                       //         LMURepairAndRefuelData.pitstops = Standing.pitstops;
 
-                                break;
-                             }
+                       //         break;
+                       //      }
 
-                        }
+                       // }
+
+
                         //TireManagementJSONdataInited = true;
 
                         //JObject fuelInfo = JObject.Parse(RepairAndRefuelJSONdata["fuelInfo"].ToString());
@@ -999,7 +1006,7 @@ namespace Redadeg.lmuDataPlugin
         }
 
 
-        private List<StandingData> DeserialiseStandingsData(string JSonString)
+        private List<LiveStandingData> DeserialiseStandingsData(string JSonString)
         {
 
             using (var stringReader = new StringReader(JSonString))
@@ -1007,11 +1014,146 @@ namespace Redadeg.lmuDataPlugin
                 using (var jsonReader = new JsonTextReader(stringReader))
                 {
                     JsonSerializer _serializer = new JsonSerializer();
-                    return _serializer.Deserialize<List<StandingData>>(jsonReader); 
+                    return _serializer.Deserialize<List<LiveStandingData>>(jsonReader); 
                 }
             }
     
         }
+
+
+        private async void lmu_LiveStandingsReadThread()
+        {
+            System.Threading.Tasks.Task.Delay(500, ctsLiveStandingsReadThread.Token).Wait();
+            while (!IsEnded)
+            {
+                if (GameRunning && !GameInMenu && !GamePaused && curGame == "LMU" && ReguiredVluesInited)
+                {
+                    try
+                    {
+                        await _ws.ConnectAsync(new Uri("ws://localhost:6398/websocket/ui"), _ws_cts.Token);
+                        SimHub.Logging.Current.Error($"Подключенно:");
+                    }
+                    catch (Exception ex)
+                    {
+                        SimHub.Logging.Current.Error($"❌ Ошибка подключения: {ex.Message}");
+                    }
+
+
+                    if (_ws != null && _ws.State == WebSocketState.Open)
+                    {
+                        string message = "{ \"messageType\": \"SUB\",\"topic\": \"LiveStandings\"}";
+                        byte[] bytes = Encoding.UTF8.GetBytes(message);
+
+
+                        try
+                        {
+                            if (!ws_RequestSended)
+                            {
+                                await _ws.SendAsync(new ArraySegment<byte>(bytes), WebSocketMessageType.Text, true, CancellationToken.None);
+                                ws_RequestSended = true;
+                            }
+
+                        }
+                        catch (Exception ex)
+                        {
+                            ws_RequestSended = false;
+                            SimHub.Logging.Current.Error($"⚠️ Ошибка чтения: {ex.Message}");
+                        }
+
+
+
+
+                        try
+                        {
+                            if (ws_RequestSended)
+                            {
+                                var buffer = new byte[4096];
+
+
+                                //if (result.MessageType == WebSocketMessageType.Close)
+                                //{
+                                //    SimHub.Logging.Current.Error("🔴 Сервер закрыл соединение");
+                                //    await _ws.CloseAsync(WebSocketCloseStatus.NormalClosure, "Закрыто клиентом", _ws_cts.Token);
+                                //}
+                                //else
+                                //{
+                                string LiveStandingjSon = "";
+                                WebSocketReceiveResult result;
+                                do
+                                {
+                                    result = await _ws.ReceiveAsync(new ArraySegment<byte>(buffer), _ws_cts.Token);
+                                    LiveStandingjSon += Encoding.UTF8.GetString(buffer, 0, result.Count);
+                                }
+                                while (!result.EndOfMessage);
+
+
+                                //SimHub.Logging.Current.Error($"📥 Получено: {LiveStandingjSon}");
+                                LiveStandingjSon = LiveStandingjSon.Replace("body", "LiveStandingData");
+                                if (ButtonBindSettings.WriteStandingsJSONToParameter) LMURepairAndRefuelData.StandingsDataJson = LiveStandingjSon;
+
+                                try
+                                {
+
+                                    StandingDataRoot StandingsData = JsonConvert.DeserializeObject<StandingDataRoot>(LiveStandingjSon);
+                                    // List<LiveStandingData> StandingsData = DeserialiseStandingsData(LiveStandingjSon);
+
+
+
+
+                                    if (ButtonBindSettings.WriteStandingsJSON)
+                                    {
+                                        File.WriteAllText(LMURepairAndRefuelData.DataPath, StandingsData.LiveStandingData.ToJson());
+                                    }
+
+                                    foreach (LiveStandingData Standing in StandingsData.LiveStandingData)
+                                    {
+                                        if (Standing.position == LMURepairAndRefuelData.Position)
+                                        {
+                                            LMURepairAndRefuelData.lastLapTime = Standing.lastLapTime;
+                                            LMURepairAndRefuelData.lastSectorTime1 = Standing.lastLapTimeS1;
+                                            LMURepairAndRefuelData.lastSectorTime2 = Standing.lastLapTimeS2;
+                                            LMURepairAndRefuelData.bestLapSectorTime1 = Standing.bestLapTimeS1;
+                                            LMURepairAndRefuelData.bestLapSectorTime2 = Standing.bestLapTimeS2;
+                                            LMURepairAndRefuelData.bestLapTime = Standing.bestLapTime;
+                                            LMURepairAndRefuelData.bestSectorTime1 = Standing.bestIndividualTimeSector1;
+                                            LMURepairAndRefuelData.bestSectorTime2 = Standing.bestIndividualTimeSector2;
+                                            LMURepairAndRefuelData.currentSectorTime1 = Standing.currentLapTimeS1;
+                                            LMURepairAndRefuelData.currentSectorTime2 = Standing.currentLapTimeS2;
+                                            //LMURepairAndRefuelData.estimatedLapTime = Standing.estimatedLapTime;
+                                            LMURepairAndRefuelData.timeBehindLeader = Standing.timeBehindLeader;
+                                            LMURepairAndRefuelData.timeBehindNext = Standing.timeBehindNext;
+                                            LMURepairAndRefuelData.lapsCompleted = Standing.currentLapsCompleted;
+                                            LMURepairAndRefuelData.DT = Standing.penalties.DT;
+                                            LMURepairAndRefuelData.SG = Standing.penalties.SG;
+                                            LMURepairAndRefuelData.pitState = Standing.pitState;
+                                            LMURepairAndRefuelData.pitstops = Standing.numPitstops;
+
+                                            break;
+                                        }
+                                    }
+                                }
+                                catch (Exception ex)
+                                {
+                                    SimHub.Logging.Current.Error($"⚠️ Ошибка преобразования: {ex.Message}");
+                                }
+
+                            }
+
+                        }
+                        catch (Exception ex)
+                        {
+                            ws_RequestSended = false;
+                            SimHub.Logging.Current.Error($"⚠️ Ошибка чтения: {ex.Message}");
+                        }
+
+
+
+                    }
+                }
+                await System.Threading.Tasks.Task.Delay(ButtonBindSettings.DataUpdateThreadTimeout, ctsLiveStandingsReadThread.Token);
+            }
+        }
+
         private async void lmu_extendedReadThread()
         {
             try
@@ -1433,6 +1575,9 @@ namespace Redadeg.lmuDataPlugin
         {
 
             _httpClient = new HttpClient();
+            _ws = new ClientWebSocket();
+            _ws_cts = new CancellationTokenSource();
+
             //LapTimes = new List<float>();
             //EnergyConsuptions = new List<float>();
             //ClearEnergyConsuptions = new List<float>();
@@ -1503,6 +1648,13 @@ namespace Redadeg.lmuDataPlugin
             lmuCalculateConsumptionsThread = new Thread(lmu_CalculateConsumptionsThread);
             lmuCalculateConsumptionsThread.Name = "CalculateConsumptionsThread";
             lmuCalculateConsumptionsThread.Start();
+
+            if (ButtonBindSettings.WriteStandingsJSON || ButtonBindSettings.WriteStandingsJSONToParameter)
+            {
+                lmuLiveStandingsReadThread = new Thread(lmu_LiveStandingsReadThread);
+                lmuLiveStandingsReadThread.Name = "LiveStandingsReadThread";
+                lmuLiveStandingsReadThread.Start();
+            }
 
             //***** Init Properties and Data SimHUB
             addPropertyToSimHUB(pluginManager);
@@ -1612,11 +1764,11 @@ namespace Redadeg.lmuDataPlugin
             pluginManager.AddProperty("Redadeg.lmu.Standings.bestSectorTime2", this.GetType(), 0);
             pluginManager.AddProperty("Redadeg.lmu.Standings.currentSectorTime1", this.GetType(), 0);
             pluginManager.AddProperty("Redadeg.lmu.Standings.currentSectorTime2", this.GetType(), 0);
-            pluginManager.AddProperty("Redadeg.lmu.Standings.estimatedLapTime", this.GetType(), 0);
+            pluginManager.AddProperty("Redadeg.lmu.Standings.SG", this.GetType(), 0);
             pluginManager.AddProperty("Redadeg.lmu.Standings.timeBehindLeader", this.GetType(), 0);
             pluginManager.AddProperty("Redadeg.lmu.Standings.timeBehindNext", this.GetType(), 0);
             pluginManager.AddProperty("Redadeg.lmu.Standings.lapsCompleted", this.GetType(), 0);
-            pluginManager.AddProperty("Redadeg.lmu.Standings.penalties", this.GetType(), 0);
+            pluginManager.AddProperty("Redadeg.lmu.Standings.DT", this.GetType(), 0);
             pluginManager.AddProperty("Redadeg.lmu.Standings.pitState", this.GetType(), 0);
             pluginManager.AddProperty("Redadeg.lmu.Standings.pitstops", this.GetType(), 0);
             pluginManager.AddProperty("Redadeg.lmu.Standings.StandingsDataJson", this.GetType(), "");
@@ -1970,8 +2122,9 @@ namespace Redadeg.lmuDataPlugin
             public static double timeBehindNext { get; set; }
 
         public static int lapsCompleted { get; set; }
-        public static float penalties { get; set; }
-        public static string pitState { get; set; }
+        public static int DT { get; set; }
+        public static int SG { get; set; }
+        public static int pitState { get; set; }
         public static int pitstops { get; set; }
         public static int Position { get; set; }
         public static string StandingsDataJson { get; set; }
