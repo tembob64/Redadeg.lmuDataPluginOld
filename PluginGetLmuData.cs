@@ -374,9 +374,11 @@ namespace Redadeg.lmuDataPlugin
             cts.Cancel();
             ctsGetJSonDataThread.Cancel();
             ctsCalculateConsumptionsThread.Cancel();
+            ctsLiveStandingsReadThread.Cancel();
             lmu_extendedThread.Join();
             lmuGetJSonDataThread.Join();
             lmuCalculateConsumptionsThread.Join();
+            lmuLiveStandingsReadThread.Join();
             // try to read complete data file from disk, compare file data with new data and write new file if there are diffs
             try
             {

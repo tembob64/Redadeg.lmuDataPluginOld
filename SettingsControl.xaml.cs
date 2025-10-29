@@ -216,7 +216,7 @@ namespace Redadeg.lmuDataPlugin
                    new JProperty("DataUpdateThreadTimeout", ButtonBindSettings.DataUpdateThreadTimeout),
                    new JProperty("AntiFlickPitMenuTimeout", ButtonBindSettings.AntiFlickPitMenuTimeout),
                    new JProperty("WriteStandingsJSON", ButtonBindSettings.WriteStandingsJSON),
-                   new JProperty("WriteStandingsJSONToParameter", ButtonBindSettings.WriteStandingsJSON));
+                   new JProperty("WriteStandingsJSONToParameter", ButtonBindSettings.WriteStandingsJSONToParameter));
             //string settings_path = AccData.path;
             try
             {
