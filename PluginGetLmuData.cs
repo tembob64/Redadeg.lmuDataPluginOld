@@ -1043,16 +1043,20 @@ namespace Redadeg.lmuDataPlugin
             {
                 if (GameRunning && !GameInMenu && !GamePaused && curGame == "LMU" && ReguiredVluesInited)
                 {
-                    try
-                    {
-                        await _ws.ConnectAsync(new Uri("ws://localhost:6398/websocket/ui"), _ws_cts.Token);
-                        SimHub.Logging.Current.Error($"Подключенно:");
-                    }
-                    catch (Exception ex)
-                    {
-                        SimHub.Logging.Current.Error($"❌ Ошибка подключения: {ex.Message}");
-                    }
 
+                    if (_ws != null && _ws.State != WebSocketState.Open)
+
+                    {
+                        try
+                        {
+                            await _ws.ConnectAsync(new Uri("ws://localhost:6398/websocket/ui"), _ws_cts.Token);
+                            SimHub.Logging.Current.Error($"Connected:");
+                        }
+                        catch (Exception ex)
+                        {
+                            SimHub.Logging.Current.Error($"Connection error: {ex.Message}");
+                        }
+                    }
 
                     if (_ws != null && _ws.State == WebSocketState.Open)
                     {
@@ -1072,7 +1076,7 @@ namespace Redadeg.lmuDataPlugin
                         catch (Exception ex)
                         {
                             ws_RequestSended = false;
-                            SimHub.Logging.Current.Error($"⚠️ Ошибка чтения: {ex.Message}");
+                            SimHub.Logging.Current.Error($"⚠️ Read error: {ex.Message}");
                         }
 
 
