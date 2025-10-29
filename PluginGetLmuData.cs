@@ -143,6 +143,12 @@ namespace Redadeg.lmuDataPlugin
                 //TireManagementJSONdataInited = false;
             }
 
+            //detect out from pit
+            if ((ButtonBindSettings.WriteStandingsJSON || ButtonBindSettings.WriteStandingsJSONToParameter) && data.GameRunning && curGame == "LMU")
+            {
+                pluginManager.SetPropertyValue("Redadeg.lmu.Standings.StandingsDataJson", this.GetType(), LMURepairAndRefuelData.StandingsDataJson);
+            }
+
             if (data.GameRunning && !data.GameInMenu && !data.GamePaused && !StopUpdate && (data.OldData != null))
             {
                 //updateDataDelayCounter--;
@@ -155,7 +161,9 @@ namespace Redadeg.lmuDataPlugin
                     LMURepairAndRefuelData.CarId = data.OldData.CarId;
                     LMURepairAndRefuelData.Position = data.OldData.Position;
                     ReguiredVluesInited = true;
-                    //detect out from pit
+                   
+                        
+                  
                     if (data.OldData.IsInPit > data.NewData.IsInPit)
                     {
                         OutFromPitFlag = true;
@@ -316,7 +324,7 @@ namespace Redadeg.lmuDataPlugin
                             pluginManager.SetPropertyValue("Redadeg.lmu.Standings.DT", this.GetType(), LMURepairAndRefuelData.DT);
                             pluginManager.SetPropertyValue("Redadeg.lmu.Standings.pitState", this.GetType(), LMURepairAndRefuelData.pitState);
                             pluginManager.SetPropertyValue("Redadeg.lmu.Standings.pitstops", this.GetType(), LMURepairAndRefuelData.pitstops);
-                            pluginManager.SetPropertyValue("Redadeg.lmu.Standings.StandingsDataJson", this.GetType(), LMURepairAndRefuelData.StandingsDataJson);
+                            
 
                             pluginManager.SetPropertyValue("Redadeg.lmu.ExtendedFromLmu.EnergyLastLap", this.GetType(), LMURepairAndRefuelData.extended_EnergyLastLap);
                             pluginManager.SetPropertyValue("Redadeg.lmu.ExtendedFromLmu.FuelLastLap", this.GetType(), LMURepairAndRefuelData.extended_FuelLastLap);
@@ -1041,7 +1049,7 @@ namespace Redadeg.lmuDataPlugin
             System.Threading.Tasks.Task.Delay(500, ctsLiveStandingsReadThread.Token).Wait();
             while (!IsEnded)
             {
-                if (GameRunning && !GameInMenu && !GamePaused && curGame == "LMU" && ReguiredVluesInited)
+                if (GameRunning &&  curGame == "LMU")
                 {
 
                     if (_ws != null && _ws.State != WebSocketState.Open)
@@ -1172,7 +1180,13 @@ namespace Redadeg.lmuDataPlugin
                                                                   LiveStandingDataSoc.bestIndividualTimeSector2,
                                                                   LiveStandingDataSoc.penalties.DT,
                                                                   LiveStandingDataSoc.penalties.SG,
-                                                                  LiveStandingDataSoc.virtualEnergy
+                                                                  LiveStandingDataSoc.virtualEnergy,
+                                                                  LiveStandingDataSoc.tireCompoundNameFront,
+                                                                  LiveStandingDataSoc.tireCompoundNameRear,
+                                                                  FL_TyreCompound = LiveStandingDataSoc.compoundNames[0],
+                                                                  FR_TyreCompound = LiveStandingDataSoc.compoundNames[1],
+                                                                  RL_TyreCompound = LiveStandingDataSoc.compoundNames[2],
+                                                                  RR_TyreCompound = LiveStandingDataSoc.compoundNames[3]
                                                               }).ToList();
 
 
