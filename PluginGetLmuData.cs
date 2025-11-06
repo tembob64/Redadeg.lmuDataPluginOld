@@ -22,7 +22,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using USBLib;
 using WoteverCommon;
-using Newtonsoft.Json.Linq;
+
 //using System.Windows.Shapes;
 //using WoteverCommon.Extensions;
 //using static System.Windows.Forms.VisualStyles.VisualStyleElement.TaskbarClock;
@@ -125,6 +125,10 @@ namespace Redadeg.lmuDataPlugin
         private HttpClient _httpClient;
         private bool loadSessionStaticInfoFromWS = true; // set to true, to force loading data if simhub is launch after the session
         private bool ReguiredVluesInited = false; // set to true, to force loading data if simhub is launch after the session
+
+     //   TireInfoClass TireInfo;
+
+
         public void DataUpdate(PluginManager pluginManager, ref GameData data)
         {
             //curGame = pluginManager.GetPropertyValue("DataCorePlugin.CurrentGame").ToString();
@@ -330,6 +334,32 @@ namespace Redadeg.lmuDataPlugin
                             pluginManager.SetPropertyValue("Redadeg.lmu.ExtendedFromLmu.FuelLastLap", this.GetType(), LMURepairAndRefuelData.extended_FuelLastLap);
                             pluginManager.SetPropertyValue("Redadeg.lmu.ExtendedFromLmu.MaxEnergyValue", this.GetType(), LMURepairAndRefuelData.extended_MaxEnergyValue);
                             pluginManager.SetPropertyValue("Redadeg.lmu.ExtendedFromLmu.MaxFuelValue", this.GetType(), LMURepairAndRefuelData.extended_MaxFuelValue);
+
+                            //tire info update
+                            //pluginManager.SetPropertyValue("Redadeg.lmu.TireInfo.FrontLeft.leftTemperature", this.GetType(), TireInfo.frontLeft.leftTemperature - 273.15);
+                            //pluginManager.SetPropertyValue("Redadeg.lmu.TireInfo.FrontLeft.centerTemperature", this.GetType(), TireInfo.frontLeft.centerTemperature - 273.15);
+                            //pluginManager.SetPropertyValue("Redadeg.lmu.TireInfo.FrontLeft.rightTemperature", this.GetType(), TireInfo.frontLeft.rightTemperature - 273.15);
+                            //pluginManager.SetPropertyValue("Redadeg.lmu.TireInfo.FrontLeft.load", this.GetType(), TireInfo.frontLeft.load);
+                            //pluginManager.SetPropertyValue("Redadeg.lmu.TireInfo.FrontLeft.pressure", this.GetType(), TireInfo.frontLeft.pressure);
+
+                            //pluginManager.SetPropertyValue("Redadeg.lmu.TireInfo.FrontRight.leftTemperature", this.GetType(), TireInfo.frontRight.leftTemperature - 273.15);
+                            //pluginManager.SetPropertyValue("Redadeg.lmu.TireInfo.FrontRight.centerTemperature", this.GetType(), TireInfo.frontRight.centerTemperature - 273.15);
+                            //pluginManager.SetPropertyValue("Redadeg.lmu.TireInfo.FrontRight.rightTemperature", this.GetType(), TireInfo.frontRight.rightTemperature - 273.15);
+                            //pluginManager.SetPropertyValue("Redadeg.lmu.TireInfo.FrontRight.load", this.GetType(), TireInfo.frontRight.load);
+                            //pluginManager.SetPropertyValue("Redadeg.lmu.TireInfo.FrontRight.pressure", this.GetType(), TireInfo.frontRight.pressure);
+
+                            //pluginManager.SetPropertyValue("Redadeg.lmu.TireInfo.RearLeft.leftTemperature", this.GetType(), TireInfo.rearLeft.leftTemperature - 273.15);
+                            //pluginManager.SetPropertyValue("Redadeg.lmu.TireInfo.RearLeft.centerTemperature", this.GetType(), TireInfo.rearLeft.centerTemperature - 273.15);
+                            //pluginManager.SetPropertyValue("Redadeg.lmu.TireInfo.RearLeft.rightTemperature", this.GetType(), TireInfo.rearLeft.rightTemperature - 273.15);
+                            //pluginManager.SetPropertyValue("Redadeg.lmu.TireInfo.RearLeft.load", this.GetType(), TireInfo.rearLeft.load);
+                            //pluginManager.SetPropertyValue("Redadeg.lmu.TireInfo.RearLeft.pressure", this.GetType(), TireInfo.rearLeft.pressure);
+
+                            //pluginManager.SetPropertyValue("Redadeg.lmu.TireInfo.RearRight.leftTemperature", this.GetType(), TireInfo.rearRight.leftTemperature - 273.15);
+                            //pluginManager.SetPropertyValue("Redadeg.lmu.TireInfo.RearRight.centerTemperature", this.GetType(), TireInfo.rearRight.centerTemperature - 273.15);
+                            //pluginManager.SetPropertyValue("Redadeg.lmu.TireInfo.RearRight.rightTemperature", this.GetType(), TireInfo.rearRight.rightTemperature - 273.15);
+                            //pluginManager.SetPropertyValue("Redadeg.lmu.TireInfo.RearRight.load", this.GetType(), TireInfo.rearRight.load);
+                            //pluginManager.SetPropertyValue("Redadeg.lmu.TireInfo.RearRight.pressure", this.GetType(), TireInfo.frontLeft.pressure);
+                            //pluginManager.SetPropertyValue("Redadeg.lmu.TireInfo.unitSystem", this.GetType(), TireInfo.unitSystem);
 
                             NeedUpdateData = false;
                         }
@@ -677,14 +707,7 @@ namespace Redadeg.lmuDataPlugin
                                     LMURepairAndRefuelData.VM_TRACTIONCONTROLMAP = LMURepairAndRefuelData.mChangedParamValue;
                                     break;
                                 case 8:
-                                    //if (LMURepairAndRefuelData.CarModel.Equals("Ferrari AF Corse 2024") || LMURepairAndRefuelData.CarModel.Equals("Ferrari AF Corse"))
-                                    //{ LMURepairAndRefuelData.VM_REAR_ANTISWAY = rearABR["F" + LMURepairAndRefuelData.mChangedParamValue]; }
-                                    //else if (LMURepairAndRefuelData.CarModel.Equals("Peugeot TotalEnergies 2024") || LMURepairAndRefuelData.CarModel.Equals("Porsche Penske Motorsport 2024") || LMURepairAndRefuelData.CarModel.Equals("Toyota Gazoo Racing 2024") || LMURepairAndRefuelData.CarModel.Equals("Peugeot TotalEnergies") || LMURepairAndRefuelData.CarModel.Equals("Porsche Penske Motorsport") || LMURepairAndRefuelData.CarModel.Equals("Toyota Gazoo Racing"))
-                                    //{ LMURepairAndRefuelData.VM_REAR_ANTISWAY = rearABR["P" + LMURepairAndRefuelData.mChangedParamValue]; }
-                                    //else if (LMURepairAndRefuelData.CarModel.Equals("Glickenhaus Racing"))
-                                    //{ LMURepairAndRefuelData.VM_REAR_ANTISWAY = rearABR["G" + LMURepairAndRefuelData.mChangedParamValue]; }
-                                    //else
-                                    //{ LMURepairAndRefuelData.VM_REAR_ANTISWAY = rearABR[LMURepairAndRefuelData.mChangedParamValue]; }
+
                                     if (!LMURepairAndRefuelData.CarModel.StartsWith("Floyd") && !LMURepairAndRefuelData.CarModel.StartsWith("VLMDH") && !LMURepairAndRefuelData.CarModel.StartsWith("Vanwall") && LMURepairAndRefuelData.CarClass.Equals("Hyper"))
                                     {
                                         String CarID = LMURepairAndRefuelData.CarModel.Split(' ')[0].Trim();
@@ -723,71 +746,18 @@ namespace Redadeg.lmuDataPlugin
                         //await System.Threading.Tasks.Task.Delay(ButtonBindSettings.AntiFlickPitMenuTimeout, ctsGetJSonDataThread.Token);
 
                         JObject GameStateJSONdata = JObject.Parse(await FetchGetGameStateJSONdata());
-                        await System.Threading.Tasks.Task.Delay(ButtonBindSettings.AntiFlickPitMenuTimeout, ctsGetJSonDataThread.Token);
+                        
 
                         //JObject TireMagagementJSONdata = JObject.Parse(await FetchTireManagementJSONdata());
                         //await System.Threading.Tasks.Task.Delay(ButtonBindSettings.AntiFlickPitMenuTimeout, ctsGetJSonDataThread.Token);
-
+                       // JObject TireInfoJSONdata = JObject.Parse(await FetchTireInfoJSONdata());
                         JObject PitstopEstimateJSONdata = JObject.Parse(await FetchPitstopEstimateJSONdata());
+
                         await System.Threading.Tasks.Task.Delay(ButtonBindSettings.AntiFlickPitMenuTimeout, ctsGetJSonDataThread.Token);
 
 
+                       // TireInfo =  DeserialisetireInfoDataWeb(await FetchTireInfoJSONdata());
 
-
-
-
-
-                        //     List<StandingData> StandingsData = DeserialiseStandingsData(await FetchStandingsJSONdata());
-
-                        //if (ButtonBindSettings.WriteStandingsJSONToParameter) LMURepairAndRefuelData.StandingsDataJson = StandingsData.ToJson();
-
-
-                        // if (ButtonBindSettings.WriteStandingsJSON)
-                        // { 
-                        //     File.WriteAllText(LMURepairAndRefuelData.DataPath, StandingsData.ToJson());
-                        // }
-
-                        // foreach (StandingData Standing in StandingsData)
-                        // {
-                        //    if (Standing.position == LMURepairAndRefuelData.Position)
-                        //     {
-                        //        LMURepairAndRefuelData.lastLapTime = Standing.lastLapTime;
-                        //         LMURepairAndRefuelData.lastSectorTime1 =Standing.lastSectorTime1;
-                        //         LMURepairAndRefuelData.lastSectorTime2 =Standing.lastSectorTime2;
-                        //         LMURepairAndRefuelData.bestLapSectorTime1 =Standing.bestLapSectorTime1;
-                        //         LMURepairAndRefuelData.bestLapSectorTime2 =Standing.bestLapSectorTime2;
-                        //         LMURepairAndRefuelData.bestLapTime = Standing.bestLapTime;
-                        //         LMURepairAndRefuelData.bestSectorTime1 =Standing.bestSectorTime1;
-                        //         LMURepairAndRefuelData.bestSectorTime2 =Standing.bestSectorTime2;
-                        //         LMURepairAndRefuelData.currentSectorTime1 =Standing.currentSectorTime1;
-                        //         LMURepairAndRefuelData.currentSectorTime2 =Standing.currentSectorTime2;
-                        //         LMURepairAndRefuelData.estimatedLapTime =Standing.estimatedLapTime;
-                        //         LMURepairAndRefuelData.timeBehindLeader =Standing.timeBehindLeader;
-                        //         LMURepairAndRefuelData.timeBehindNext =Standing.timeBehindNext;
-                        //         LMURepairAndRefuelData.lapsCompleted = Standing.lapsCompleted;
-                        //         LMURepairAndRefuelData.penalties = Standing.penalties;
-                        //         LMURepairAndRefuelData.pitState = Standing.pitState;
-                        //         LMURepairAndRefuelData.pitstops = Standing.pitstops;
-
-                        //         break;
-                        //      }
-
-                        // }
-
-
-                        //TireManagementJSONdataInited = true;
-
-                        //JObject fuelInfo = JObject.Parse(RepairAndRefuelJSONdata["fuelInfo"].ToString());
-                        //JObject pitStopLength = JObject.Parse(RepairAndRefuelJSONdata["pitStopLength"].ToString());
-                        //JObject pitMenuJSONData = JObject.Parse(RepairAndRefuelJSONdata["pitMenu"].ToString()); 
-
-                        //JObject tireInventory = JObject.Parse(TireMagagementJSONdata["tireInventory"].ToString());
-
-                        //LMURepairAndRefuelData.maxAvailableTires = tireInventory["maxAvailableTires"] != null ? (int)tireInventory["maxAvailableTires"] : 0;
-                        //LMURepairAndRefuelData.newTires = tireInventory["newTires"] != null ? (int)tireInventory["newTires"] : 0;
-
-                        //LMURepairAndRefuelData.currentBattery = fuelInfo["currentBattery"] != null ? (int)fuelInfo["currentBattery"] : 0;
-                        //LMURepairAndRefuelData.currentFuel = fuelInfo["currentFuel"] != null ? (int)fuelInfo["currentFuel"] : 0;
 
                         LMURepairAndRefuelData.currentBattery = (int)((LMURepairAndRefuelData.extended_CurrentBatteryValue / LMURepairAndRefuelData.extended_MaxBatteryValue) * 100);
                         LMURepairAndRefuelData.currentFuel = LMURepairAndRefuelData.extended_CurrentFuelValue;
@@ -813,147 +783,13 @@ namespace Redadeg.lmuDataPlugin
 
                         }
 
-
-
-
-                        //LMURepairAndRefuelData.maxVirtualEnergy = fuelInfo["maxVirtualEnergy"] != null ? (int)fuelInfo["maxVirtualEnergy"] : 0;
-                        //LMURepairAndRefuelData.currentVirtualEnergy = fuelInfo["currentVirtualEnergy"] != null ? (int)fuelInfo["currentVirtualEnergy"] : 0;
-
-                        //LMURepairAndRefuelData.maxBattery = fuelInfo["maxBattery"] != null ? (int)fuelInfo["maxBattery"] : 0;
-                        //LMURepairAndRefuelData.maxFuel = fuelInfo["maxFuel"] != null ? (int)fuelInfo["maxFuel"] : 0;
-
-                        //LMURepairAndRefuelData.pitStopLength = pitStopLength["timeInSeconds"] != null ? (int)pitStopLength["timeInSeconds"] : 0;
-
                         LMURepairAndRefuelData.maxVirtualEnergy = (int)LMURepairAndRefuelData.extended_MaxEnergyValue;
                         LMURepairAndRefuelData.currentVirtualEnergy = (int)LMURepairAndRefuelData.extended_CurrentEnergyValue;
 
                         LMURepairAndRefuelData.maxBattery = (int)LMURepairAndRefuelData.extended_MaxBatteryValue;
                         LMURepairAndRefuelData.maxFuel = (int)LMURepairAndRefuelData.extended_MaxFuelValue;
 
-                        //LMURepairAndRefuelData.pitStopLength = pitStopLength["timeInSeconds"] != null ? (int)pitStopLength["timeInSeconds"] : 0;
-
-                        //isStopAndGo = false;
-                        //isDamaged = false;
-
-
-
-                        //pitStopUpdatePause area
-
-                        //pitStopUpdatePause area
-                        //int idx = 0;
-                        //    int Virtual_Energy = 0;
-                        //    foreach (JObject PMCs in pitMenuJSONData["pitMenu"])
-                        //    {
-
-
-
-                        //        if ((int)PMCs["PMC Value"] == 0)
-                        //        {
-                        //            LMURepairAndRefuelData.passStopAndGo = PMCs["settings"][(int)PMCs["currentSetting"]]["text"].ToString();
-
-                        //        }
-
-                        //        if ((int)PMCs["PMC Value"] == 1)
-                        //        {
-                        //            if (idx == 0)
-                        //            {
-                        //                //                                       isStopAndGo = false;
-                        //                LMURepairAndRefuelData.passStopAndGo = "";
-                        //            }
-                        //            LMURepairAndRefuelData.RepairDamage = PMCs["settings"][(int)PMCs["currentSetting"]]["text"].ToString();
-
-                        //        }
-
-                        //        if ((int)PMCs["PMC Value"] == 4)
-                        //        {
-                        //            LMURepairAndRefuelData.Driver = PMCs["settings"][(int)PMCs["currentSetting"]]["text"].ToString();
-                        //            //haveDriverMenu = true;
-                        //        }
-                        //        try
-                        //        {
-
-
-                        //            if ((int)PMCs["PMC Value"] == 5)
-                        //            {
-                        //                LMURepairAndRefuelData.addVirtualEnergy = PMCs["settings"][(int)PMCs["currentSetting"]]["text"].ToString();
-                        //                Virtual_Energy = (int)PMCs["currentSetting"];
-                        //                //pluginManager.SetPropertyValue("georace.lmu.Virtual_Energy", this.GetType(), Virtual_Energy);
-                        //            }
-                        //            if ((int)PMCs["PMC Value"] == 6)
-                        //            {
-                        //                if (PMCs["name"].ToString().Equals("FUEL:"))
-                        //                {
-                        //                    LMURepairAndRefuelData.addFuel = PMCs["settings"][(int)PMCs["currentSetting"]]["text"].ToString();
-                        //                }
-                        //                else
-                        //                {
-                        //                    LMURepairAndRefuelData.FuelRatio = (double)PMCs["settings"][(int)PMCs["currentSetting"]]["text"];
-                        //                    LMURepairAndRefuelData.addFuel = string.Format("{0:f1}", LMURepairAndRefuelData.FuelRatio * Virtual_Energy) + "L" + LMURepairAndRefuelData.addVirtualEnergy.Split('%')[1];
-                        //                }
-                        //            }
-                        //        }
-                        //        catch
-                        //        {
-                        //            LMURepairAndRefuelData.FuelRatio = 0;
-                        //        }
-
-
-                        //        try
-                        //        {
-                        //            if ((int)PMCs["PMC Value"] == 21)
-                        //            {
-                        //                LMURepairAndRefuelData.Grille = PMCs["settings"][(int)PMCs["currentSetting"]]["text"].ToString();
-                        //            }
-                        //            if ((int)PMCs["PMC Value"] == 19)
-                        //            {
-                        //                LMURepairAndRefuelData.Wing = PMCs["settings"][(int)PMCs["currentSetting"]]["text"].ToString();
-                        //            }
-                        //        }
-                        //        catch
-                        //        {
-                        //        }
-
-                        //        if ((int)PMCs["PMC Value"] == 12)
-                        //        {
-                        //            LMURepairAndRefuelData.fl_TyreChange = PMCs["settings"][(int)PMCs["currentSetting"]]["text"].ToString();
-                        //        }
-                        //        if ((int)PMCs["PMC Value"] == 13)
-                        //        {
-                        //            LMURepairAndRefuelData.fr_TyreChange = PMCs["settings"][(int)PMCs["currentSetting"]]["text"].ToString();
-                        //        }
-                        //        if ((int)PMCs["PMC Value"] == 14)
-                        //        {
-                        //            LMURepairAndRefuelData.rl_TyreChange = PMCs["settings"][(int)PMCs["currentSetting"]]["text"].ToString();
-                        //        }
-                        //        if ((int)PMCs["PMC Value"] == 15)
-                        //        {
-                        //            LMURepairAndRefuelData.rr_TyreChange = PMCs["settings"][(int)PMCs["currentSetting"]]["text"].ToString();
-                        //        }
-
-                        //        if ((int)PMCs["PMC Value"] == 24)
-                        //        {
-                        //            LMURepairAndRefuelData.fl_TyrePressure = PMCs["settings"][(int)PMCs["currentSetting"]]["text"].ToString();
-                        //        }
-                        //        if ((int)PMCs["PMC Value"] == 25)
-                        //        {
-                        //            LMURepairAndRefuelData.fr_TyrePressure = PMCs["settings"][(int)PMCs["currentSetting"]]["text"].ToString();
-                        //        }
-                        //        if ((int)PMCs["PMC Value"] == 26)
-                        //        {
-                        //            LMURepairAndRefuelData.rl_TyrePressure = PMCs["settings"][(int)PMCs["currentSetting"]]["text"].ToString();
-                        //        }
-                        //        if ((int)PMCs["PMC Value"] == 27)
-                        //        {
-                        //            LMURepairAndRefuelData.rr_TyrePressure = PMCs["settings"][(int)PMCs["currentSetting"]]["text"].ToString();
-                        //        }
-
-                        //        if ((int)PMCs["PMC Value"] == 32)
-                        //        {
-                        //            LMURepairAndRefuelData.replaceBrakes = PMCs["settings"][(int)PMCs["currentSetting"]]["text"].ToString();
-                        //        }
-                        //        idx++;
-                        //    }
-                        //pitStopUpdatePause area
+                      
                     }
                     catch (Exception ex2)
                     {
@@ -963,44 +799,6 @@ namespace Redadeg.lmuDataPlugin
                     }
 
 
-
-                    //try
-                    //{
-
-
-                    //    //if (ClearEnergyConsuptions.Count() > 0 && LapTimes.Count() > 0 && LMURepairAndRefuelData.maxVirtualEnergy > 0)
-                    //    //{
-                    //    //    float virtualErg = (float)LMURepairAndRefuelData.currentVirtualEnergy / (float)LMURepairAndRefuelData.maxVirtualEnergy * 100;
-                    //    //    LMURepairAndRefuelData.energyTimeElapsed = (LapTimes.Average() * virtualErg / ClearEnergyConsuptions.Average()) / 60;
-                    //    //    LMURepairAndRefuelData.VirtualEnergy = virtualErg;
-                    //    //    //LTime ConsumAvg
-                    //    //    //      Energy    
-                    //    //}
-
-                    //    //if (EnergyConsuptions.Count() > 0)
-                    //    //{
-                    //    //    LMURepairAndRefuelData.energyPerLast5Lap = (float)EnergyConsuptions.Average();
-                    //    //}
-                    //    //else
-                    //    //{
-                    //    //    LMURepairAndRefuelData.energyPerLast5Lap = 0;
-                    //    //}
-
-                    //    //if (ClearEnergyConsuptions.Count() > 0)
-                    //    //{
-                    //    //    LMURepairAndRefuelData.energyPerLast5ClearLap = (float)ClearEnergyConsuptions.Average();
-                    //    //}
-                    //    //else
-                    //    //{
-                    //    //    LMURepairAndRefuelData.energyPerLast5ClearLap = 0;
-                    //    //}
-                    //}
-                    //catch (Exception ex)
-                    //{
-                    //    Logging.Current.Info("SectorChange: " + ex.ToString());
-
-                    //}
-                    //updateDataDelayCounter = ButtonBindSettings.UpdateDataCounter;
                     NeedUpdateData = true;
                 }
                 GetDataThreadEndWork = true;
@@ -1041,6 +839,21 @@ namespace Redadeg.lmuDataPlugin
                 {
                     JsonSerializer _serializer = new JsonSerializer();
                     return _serializer.Deserialize<List<StandingData>>(jsonReader);
+                }
+            }
+
+        }
+
+
+        private TireInfoClass DeserialisetireInfoDataWeb(string JSonString)
+        {
+
+            using (var stringReader = new StringReader(JSonString))
+            {
+                using (var jsonReader = new JsonTextReader(stringReader))
+                {
+                    JsonSerializer _serializer = new JsonSerializer();
+                    return _serializer.Deserialize<TireInfoClass>(jsonReader);
                 }
             }
 
@@ -1233,7 +1046,7 @@ namespace Redadeg.lmuDataPlugin
                                 }
                                 catch (Exception ex)
                                 {
-                                    SimHub.Logging.Current.Error($"⚠️ Ошибка преобразования: {ex.Message}");
+                                    SimHub.Logging.Current.Error($"⚠️ Convertion error: {ex.Message}");
                                 }
 
                             }
@@ -1242,7 +1055,7 @@ namespace Redadeg.lmuDataPlugin
                         catch (Exception ex)
                         {
                             ws_RequestSended = false;
-                            SimHub.Logging.Current.Error($"⚠️ Ошибка чтения: {ex.Message}");
+                            SimHub.Logging.Current.Error($"⚠️ read error: {ex.Message}");
                         }
 
 
@@ -1552,6 +1365,23 @@ namespace Redadeg.lmuDataPlugin
                 return string.Empty; // Return an empty string in case of an error
             }
         }
+
+
+        private async Task<string> FetchTireInfoJSONdata()
+        {
+            try
+            {
+                var urlCarSetupOverview = "http://localhost:6397/rest/garage/tireinfo";
+                var responseCarSetupOverview = await _httpClient.GetStringAsync(urlCarSetupOverview);
+                return responseCarSetupOverview;
+            }
+            catch (Exception ex)
+            {
+                SimHub.Logging.Current.Error($"Failed to fetch CarSetupOverview data: {ex.Message}");
+                return string.Empty; // Return an empty string in case of an error
+            }
+        }
+
         private float GetPMCValue(JArray pitMenuJSONData, int pmcValue)
         {
             JToken item = pitMenuJSONData?.FirstOrDefault(x => (int?)x["PMC Value"] == pmcValue);
@@ -1676,7 +1506,8 @@ namespace Redadeg.lmuDataPlugin
             _httpClient = new HttpClient();
             _ws = new ClientWebSocket();
             _ws_cts = new CancellationTokenSource();
-
+          //  TireInfo = new TireInfoClass();
+            
             //LapTimes = new List<float>();
             //EnergyConsuptions = new List<float>();
             //ClearEnergyConsuptions = new List<float>();
@@ -1697,6 +1528,7 @@ namespace Redadeg.lmuDataPlugin
                 ButtonBindSettings.GetMemoryDataThreadTimeout = JSONSettingsdata["GetMemoryDataThreadTimeout"] != null ? (int)JSONSettingsdata["GetMemoryDataThreadTimeout"] : 50;
                 ButtonBindSettings.DataUpdateThreadTimeout = JSONSettingsdata["DataUpdateThreadTimeout"] != null ? (int)JSONSettingsdata["DataUpdateThreadTimeout"] : 100;
                 ButtonBindSettings.AntiFlickPitMenuTimeout = JSONSettingsdata["AntiFlickPitMenuTimeout"] != null ? (int)JSONSettingsdata["AntiFlickPitMenuTimeout"] : 10;
+                ButtonBindSettings.LMU_PluginInstallDir = JSONSettingsdata["LMU_PluginInstallDir"] != null ? ((string)JSONSettingsdata["LMU_PluginInstallDir"]).Equals(string.Empty) ? "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Le Mans Ultimate\\Plugins" : (string)JSONSettingsdata["LMU_PluginInstallDir"] : "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Le Mans Ultimate\\Plugins";
             }
             catch
             {
@@ -1707,6 +1539,7 @@ namespace Redadeg.lmuDataPlugin
                 ButtonBindSettings.GetMemoryDataThreadTimeout = 50;
                 ButtonBindSettings.DataUpdateThreadTimeout = 100;
                 ButtonBindSettings.AntiFlickPitMenuTimeout = 10;
+                ButtonBindSettings.LMU_PluginInstallDir =  "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Le Mans Ultimate\\Plugins";
                 JObject JSONdata = new JObject(
                  new JProperty("Clock_Format24", ButtonBindSettings.Clock_Format24),
                  new JProperty("RealTimeClock", ButtonBindSettings.RealTimeClock),
@@ -1714,7 +1547,8 @@ namespace Redadeg.lmuDataPlugin
                  new JProperty("DataUpdateThreadTimeout", ButtonBindSettings.DataUpdateThreadTimeout),
                  new JProperty("AntiFlickPitMenuTimeout", ButtonBindSettings.AntiFlickPitMenuTimeout),
                  new JProperty("WriteStandingsJSON", ButtonBindSettings.WriteStandingsJSON),
-                 new JProperty("WriteStandingsJSONToParameter", ButtonBindSettings.WriteStandingsJSON));
+                 new JProperty("WriteStandingsJSONToParameter", ButtonBindSettings.WriteStandingsJSON),
+                 new JProperty("LMU_PluginInstallDir", ButtonBindSettings.LMU_PluginInstallDir));
                 //string settings_path = AccData.path;
                 try
                 {
@@ -1727,8 +1561,6 @@ namespace Redadeg.lmuDataPlugin
                     //A MessageBox creates graphical glitches after closing it. Search another way, maybe using the Standard Log in SimHub\Logs
                     //MessageBox.Show("Cannot create or write the following file: \n" + System.Environment.CurrentDirectory + "\\" + AccData.path, "Error", MessageBoxButton.OK, MessageBoxImage.Error);
                     Logging.Current.Error("Plugin georace.lmuDataPlugin - Cannot create or write settings file: " + System.Environment.CurrentDirectory + "\\" + LMURepairAndRefuelData.path);
-
-
                 }
                 ;
             }
@@ -1749,12 +1581,12 @@ namespace Redadeg.lmuDataPlugin
             lmuCalculateConsumptionsThread.Name = "CalculateConsumptionsThread";
             lmuCalculateConsumptionsThread.Start();
 
-            if (ButtonBindSettings.WriteStandingsJSON || ButtonBindSettings.WriteStandingsJSONToParameter)
-            {
+            //if (ButtonBindSettings.WriteStandingsJSON || ButtonBindSettings.WriteStandingsJSONToParameter)
+            //{
                 lmuLiveStandingsReadThread = new Thread(lmu_LiveStandingsReadThread);
                 lmuLiveStandingsReadThread.Name = "LiveStandingsReadThread";
                 lmuLiveStandingsReadThread.Start();
-            }
+            //}
 
             //***** Init Properties and Data SimHUB
             addPropertyToSimHUB(pluginManager);
@@ -1826,6 +1658,31 @@ namespace Redadeg.lmuDataPlugin
             pluginManager.AddProperty("Redadeg.lmu.Extended.ChangedParamType", this.GetType(), -1);
             pluginManager.AddProperty("Redadeg.lmu.Extended.ChangedParamValue", this.GetType(), "None");
 
+
+            //pluginManager.AddProperty("Redadeg.lmu.TireInfo.FrontLeft.leftTemperature", this.GetType(), "None");
+            //pluginManager.AddProperty("Redadeg.lmu.TireInfo.FrontLeft.centerTemperature", this.GetType(), "None");
+            //pluginManager.AddProperty("Redadeg.lmu.TireInfo.FrontLeft.rightTemperature", this.GetType(), "None");
+            //pluginManager.AddProperty("Redadeg.lmu.TireInfo.FrontLeft.load", this.GetType(), "None");
+            //pluginManager.AddProperty("Redadeg.lmu.TireInfo.FrontLeft.pressure", this.GetType(), "None");
+
+            //pluginManager.AddProperty("Redadeg.lmu.TireInfo.FrontRight.leftTemperature", this.GetType(), "None");
+            //pluginManager.AddProperty("Redadeg.lmu.TireInfo.FrontRight.centerTemperature", this.GetType(), "None");
+            //pluginManager.AddProperty("Redadeg.lmu.TireInfo.FrontRight.rightTemperature", this.GetType(), "None");
+            //pluginManager.AddProperty("Redadeg.lmu.TireInfo.FrontRight.load", this.GetType(), "None");
+            //pluginManager.AddProperty("Redadeg.lmu.TireInfo.FrontRight.pressure", this.GetType(), "None");
+
+            //pluginManager.AddProperty("Redadeg.lmu.TireInfo.RearLeft.leftTemperature", this.GetType(), "None");
+            //pluginManager.AddProperty("Redadeg.lmu.TireInfo.RearLeft.centerTemperature", this.GetType(), "None");
+            //pluginManager.AddProperty("Redadeg.lmu.TireInfo.RearLeft.rightTemperature", this.GetType(), "None");
+            //pluginManager.AddProperty("Redadeg.lmu.TireInfo.RearLeft.load", this.GetType(), "None");
+            //pluginManager.AddProperty("Redadeg.lmu.TireInfo.RearLeft.pressure", this.GetType(), "None");
+
+            //pluginManager.AddProperty("Redadeg.lmu.TireInfo.RearRight.leftTemperature", this.GetType(), "None");
+            //pluginManager.AddProperty("Redadeg.lmu.TireInfo.RearRight.centerTemperature", this.GetType(), "None");
+            //pluginManager.AddProperty("Redadeg.lmu.TireInfo.RearRight.rightTemperature", this.GetType(), "None");
+            //pluginManager.AddProperty("Redadeg.lmu.TireInfo.RearRight.load", this.GetType(), "None");
+            //pluginManager.AddProperty("Redadeg.lmu.TireInfo.RearRight.pressure", this.GetType(), "None");
+            //pluginManager.AddProperty("Redadeg.lmu.TireInfo.unitSystem", this.GetType(), "None");
 
             pluginManager.AddProperty("Redadeg.lmu.mMessage", this.GetType(), "");
 

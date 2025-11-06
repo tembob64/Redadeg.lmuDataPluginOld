@@ -8,6 +8,52 @@ namespace Redadeg.lmuDataPlugin
 {
 
 
+    // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse);
+    public class FrontLeft
+    {
+        public double centerTemperature { get; set; }
+        public double leftTemperature { get; set; }
+        public double load { get; set; }
+        public double pressure { get; set; }
+        public double rightTemperature { get; set; }
+    }
+
+    public class FrontRight
+    {
+        public double centerTemperature { get; set; }
+        public double leftTemperature { get; set; }
+        public double load { get; set; }
+        public double pressure { get; set; }
+        public double rightTemperature { get; set; }
+    }
+
+    public class RearLeft
+    {
+        public double centerTemperature { get; set; }
+        public double leftTemperature { get; set; }
+        public double load { get; set; }
+        public double pressure { get; set; }
+        public double rightTemperature { get; set; }
+    }
+
+    public class RearRight
+    {
+        public double centerTemperature { get; set; }
+        public double leftTemperature { get; set; }
+        public double load { get; set; }
+        public double pressure { get; set; }
+        public double rightTemperature { get; set; }
+    }
+
+    public class TireInfoClass
+    {
+        public FrontLeft frontLeft { get; set; }
+        public FrontRight frontRight { get; set; }
+        public RearLeft rearLeft { get; set; }
+        public RearRight rearRight { get; set; }
+        public string unitSystem { get; set; }
+    }
+
 
     // Root myDeserializedClass = JsonConvert.DeserializeObject<Root>(myJsonResponse);
     public class LiveStandingData
