@@ -95,8 +95,7 @@ namespace Redadeg.lmuDataPlugin
                 ButtonBindSettings.GetMemoryDataThreadTimeout = JSONSettingsdata["GetMemoryDataThreadTimeout"] != null ? (int)JSONSettingsdata["GetMemoryDataThreadTimeout"] : 50;
                 ButtonBindSettings.DataUpdateThreadTimeout = JSONSettingsdata["DataUpdateThreadTimeout"] != null ? (int)JSONSettingsdata["DataUpdateThreadTimeout"] : 100;
                 ButtonBindSettings.AntiFlickPitMenuTimeout = JSONSettingsdata["AntiFlickPitMenuTimeout"] != null ? (int)JSONSettingsdata["AntiFlickPitMenuTimeout"] : 10;
-                ButtonBindSettings.LMU_PluginInstallDir = JSONSettingsdata["LMU_PluginInstallDir"] != null ? ((string)JSONSettingsdata["LMU_PluginInstallDir"]).Equals(string.Empty) ? "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Le Mans Ultimate\\Plugins" : (string)JSONSettingsdata["LMU_PluginInstallDir"] : "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Le Mans Ultimate\\Plugins";
-                SaveSetting();
+                ButtonBindSettings.LMU_PluginInstallDir = JSONSettingsdata["LMU_PluginInstallDir"] != null ? (string)JSONSettingsdata["LMU_PluginInstallDir"] : "C:\\Program Files (x86)\\Steam\\steamapps\\common\\Le Mans Ultimate\\Plugins"; SaveSetting();
             }
             catch { }
             WriteStandingsJSON.IsChecked = ButtonBindSettings.WriteStandingsJSON;
@@ -214,6 +213,16 @@ namespace Redadeg.lmuDataPlugin
         internal void UpdateLMUPlugin(string LMU_PluginPath)
         {
             message_text.Text = "";
+            message_text.Foreground = Brushes.Green;
+            bool isRunning = Process.GetProcessesByName("Le Mans Ultimate").Any();
+
+            if (isRunning)
+            {
+                message_text.Text += "Please close Le Mans Ultimate before updating the plugin!\r\n";
+                message_text.Foreground = Brushes.Red;
+                return;
+            }
+            
             string owner = "tembob64"; // Замените на владельца репозитория
             string repo = "LMU_SharedMemoryMapPlugin"; // Замените на название репозитория
             string releasesUrl = $"https://api.github.com/repos/{owner}/{repo}/releases/latest";
@@ -319,6 +328,7 @@ namespace Redadeg.lmuDataPlugin
                 }
                 catch (Exception ex)
                 {
+                    message_text.Foreground = Brushes.Red;
                     message_text.Text += $"Error: {ex.ToString()}\r\n";
                 }
             }
@@ -327,6 +337,7 @@ namespace Redadeg.lmuDataPlugin
 
         internal void CheckUpdateLMUPlugin(string LMU_PluginPath)
         {
+            message_text.Foreground = Brushes.Green;
             message_text.Text = "";
             string owner = "tembob64"; // Замените на владельца репозитория
             string repo = "LMU_SharedMemoryMapPlugin"; // Замените на название репозитория
@@ -334,7 +345,7 @@ namespace Redadeg.lmuDataPlugin
 
             using (HttpClient client = new HttpClient())
             {
-                client.DefaultRequestHeaders.UserAgent.ParseAdd("LMU_Plugin_update_service");
+                client.DefaultRequestHeaders.UserAgent.ParseAdd("LMU_Plugin_update_service1");
 
                 try
                 {
@@ -399,6 +410,7 @@ namespace Redadeg.lmuDataPlugin
                 }
                 catch (Exception ex)
                 {
+                    message_text.Foreground = Brushes.Red;
                     message_text.Text += $"Error: {ex.ToString()}\r\n";
                 }
             }

@@ -64,9 +64,9 @@ namespace Redadeg.lmuDataPlugin
         public int Priority => 1;
 
         //input variables
-        private string curGame;
+        internal string curGame;
         private bool GameInMenu = true;
-        private bool GameRunning = false;
+        internal bool GameRunning = false;
         private bool GamePaused = true;
 
         private Dictionary<string, List<string>> rearARBs;
@@ -136,11 +136,9 @@ namespace Redadeg.lmuDataPlugin
             GameInMenu = data.GameInMenu;
             GameRunning = data.GameRunning;
             GamePaused = data.GamePaused;
-
+ 
             // When game is in menu, we setup flag to recall the pitmenu settings at the beginning of the session
-            if (curGame == "LMU"
-                    && data.GameRunning && data.GameInMenu && (!loadSessionStaticInfoFromWS)
-                )
+            if (curGame == "LMU" && data.GameRunning && data.GameInMenu && (!loadSessionStaticInfoFromWS))
             {
                 loadSessionStaticInfoFromWS = true;
                 ReguiredVluesInited = false;
@@ -2189,6 +2187,7 @@ namespace Redadeg.lmuDataPlugin
         public static double extended_MaxFuelValue;
         public static float extended_EnergyLastLap;
         public static float extended_FuelLastLap;
+
     }
 
 }

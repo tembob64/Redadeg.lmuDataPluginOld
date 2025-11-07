@@ -68,7 +68,7 @@
                     <CheckBox x:Name="clock_format24" HorizontalAlignment="Center" Height="15" Margin="320,2,0,2"  Width="180" Grid.Row="10" Grid.Column="1" ToolTip="24 hour clock format in Session tab" Checked="clock_format24_Checked" Unchecked="clock_format24_unChecked"/>
 
                     <TextBlock HorizontalAlignment="Left" Height="15" Margin="0,7,0,8" TextWrapping="Wrap" Text="LMU Plugins folder" Width="175" Grid.Row="11"/>
-                    <TextBox x:Name="pluginIstallPath" HorizontalAlignment="Left" Grid.Row="11" TextWrapping="Wrap" Text="C:\Program Files (x86)\Steam\steamapps\common\Le Mans Ultimate\Plugins" VerticalAlignment="Center" Width="450" Grid.Column="1" TextChanged="pluginIstallPath_TextChanged"/>
+                    <TextBox x:Name="pluginIstallPath" HorizontalAlignment="Left" Grid.Row="11" TextWrapping="Wrap" VerticalAlignment="Center" Width="450" Grid.Column="1" TextChanged="pluginIstallPath_TextChanged"/>
                     <Button x:Name="btn_SelectLmuPluginFolder" HorizontalAlignment="Left" Height="15" Margin="455,0,0,3"  Width="48" Grid.Row="11" Grid.Column="1" ToolTip="Change LMU Plugin folder" Click="Click_SelectLmuPluginFolder" VerticalAlignment="Bottom" >
                         <TextBlock x:Name="btn_SelectLmuPluginFolderText" Text="..." TextAlignment="Center" HorizontalAlignment="Center" Height="20"   Width="48" Grid.Row="11" Grid.Column="1" />
                     </Button>
@@ -76,7 +76,7 @@
                     <Button x:Name="btn_CheckUpdate" HorizontalAlignment="Left" Height="15" Margin="320,2,0,2"  Width="180" Grid.Row="12" Grid.Column="1" ToolTip="Check update available" Click="btn_CheckUpdate_Click" >
                         <TextBlock x:Name="btn_CheckUpdateText" Text="Check Update" TextAlignment="Center" HorizontalAlignment="Center" Height="24"   Width="180" Grid.Row="7" Grid.Column="1" />
                     </Button>
-                    <TextBlock x:Name="message_text" TextWrapping="Wrap" Height="300" Width="755" Text="Test Tesxt" Grid.Row="13"  Grid.Column="0" Grid.ColumnSpan="2"  VerticalAlignment="Top" HorizontalAlignment="Left" TextAlignment="Center" FontSize="14" FontWeight="Bold" Foreground="#FF0EAD3C"/>
+                    <TextBlock x:Name="message_text" TextWrapping="Wrap" Height="300" Width="755" Text="Test Tesxt" Grid.Row="13"  Grid.Column="0" Grid.ColumnSpan="2"  VerticalAlignment="Top" HorizontalAlignment="Left" TextAlignment="Center" FontSize="14" FontWeight="Bold" Foreground="Green"/>
 
                 </Grid>
                 <TextBlock TextWrapping="Wrap" Text="Plugin Description" FontWeight="Bold" Margin="0,0,0,5"/>
